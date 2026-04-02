@@ -18,38 +18,73 @@
 }
 body{font-family:'Sarabun',sans-serif;background:var(--bg);color:var(--text);font-size:15px;min-height:100vh}
 
-/* ── HEADER ── */
-.hdr{
-  background:#0f172a;border-bottom:3px solid var(--blue);
-  padding:10px 16px;display:flex;align-items:center;gap:10px;
-  position:sticky;top:0;z-index:100;
+/* ── HEADER ROW 1: title ── */
+.hdr-top{
+  background:#0f172a;
+  padding:14px 20px;
+  display:flex;align-items:center;gap:14px;
+  position:sticky;top:0;z-index:101;
+  border-bottom:1px solid #1e293b;
 }
 .logo{
-  width:38px;height:38px;border-radius:9px;flex-shrink:0;
+  width:44px;height:44px;border-radius:10px;flex-shrink:0;
   background:linear-gradient(135deg,#2563eb,#7c3aed);
   display:flex;align-items:center;justify-content:center;
-  font-size:18px;border:2px solid rgba(255,255,255,.15);
+  font-size:22px;border:2px solid rgba(255,255,255,.18);
 }
-.hdr-mid{flex:1;min-width:0;text-align:center;padding:0 6px}
-.hdr-mid h1{font-size:13px;font-weight:700;color:#fff;line-height:1.35;
-  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.hdr-mid .sub{font-size:10px;color:#64748b;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hdr-title{flex:1;min-width:0;text-align:center;}
+.hdr-title h1{
+  font-size:15px;font-weight:700;color:#fff;
+  line-height:1.45;letter-spacing:.01em;
+}
+.hdr-title .sub{
+  font-size:11px;color:#60a5fa;margin-top:4px;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  letter-spacing:.01em;
+}
+
+/* ── HEADER ROW 2: fiscal + tabs ── */
+.hdr-bot{
+  background:#1e293b;
+  border-bottom:3px solid #2563eb;
+  padding:0 16px;
+  display:flex;align-items:center;justify-content:space-between;
+  position:sticky;top:73px;z-index:100;gap:0;
+}
+.tabs{display:flex;overflow-x:auto;scrollbar-width:none;flex:1}
+.tabs::-webkit-scrollbar{display:none}
+.tab{
+  font-family:'Sarabun',sans-serif;font-size:13px;font-weight:500;
+  color:#64748b;padding:11px 18px;border:none;background:none;
+  cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-3px;
+  transition:all .15s;display:flex;align-items:center;gap:6px;
+  white-space:nowrap;flex-shrink:0;
+}
+.tab:hover{color:#94a3b8}
+.tab.on{color:#60a5fa;border-bottom-color:#60a5fa;font-weight:600}
 
 /* fiscal picker */
-.fp{display:flex;align-items:center;border:1.5px solid #1d4ed8;border-radius:9px;overflow:hidden;background:#fff;flex-shrink:0}
-.fp-lbl{background:#1d4ed8;color:#fff;font-size:10px;font-weight:700;letter-spacing:.04em;padding:0 8px;height:36px;display:flex;align-items:center;gap:4px;white-space:nowrap;font-family:'Sarabun',sans-serif}
+.fp{
+  display:flex;align-items:center;
+  border:1.5px solid #3b82f6;border-radius:9px;overflow:hidden;
+  background:#fff;flex-shrink:0;margin:6px 0;
+}
+.fp-lbl{
+  background:#2563eb;color:#fff;
+  font-size:10px;font-weight:700;letter-spacing:.04em;
+  padding:0 9px;height:34px;
+  display:flex;align-items:center;gap:4px;
+  white-space:nowrap;font-family:'Sarabun',sans-serif;
+}
 .fp-lbl svg{width:12px;height:12px;fill:#fff;flex-shrink:0}
-.fp-div{width:1px;background:#bfdbfe;height:36px;flex-shrink:0}
-.fp select{font-family:'Sarabun',sans-serif;font-size:12px;font-weight:700;color:#1e3a8a;background:transparent;border:none;outline:none;cursor:pointer;padding:0 8px;height:36px}
+.fp-div{width:1px;background:#bfdbfe;height:34px;flex-shrink:0}
+.fp select{
+  font-family:'Sarabun',sans-serif;font-size:12px;font-weight:700;
+  color:#1e3a8a;background:transparent;border:none;outline:none;
+  cursor:pointer;padding:0 7px;height:34px;
+}
 .fp-locked{font-size:11px;font-weight:700;color:#1e3a8a;padding:0 10px;display:flex;align-items:center;gap:5px;white-space:nowrap}
 .lock-icon{font-size:12px}
-
-/* ── TAB BAR ── */
-.tabs{background:#1e293b;border-bottom:1px solid #334155;display:flex;padding:0 16px;position:sticky;top:61px;z-index:99;overflow-x:auto;scrollbar-width:none}
-.tabs::-webkit-scrollbar{display:none}
-.tab{font-family:'Sarabun',sans-serif;font-size:13px;font-weight:500;color:#64748b;padding:10px 16px;border:none;background:none;cursor:pointer;border-bottom:2px solid transparent;transition:all .15s;display:flex;align-items:center;gap:6px;white-space:nowrap;flex-shrink:0}
-.tab:hover{color:#94a3b8}
-.tab.on{color:#60a5fa;border-bottom-color:#2563eb;font-weight:600}
 
 /* ── PAGES ── */
 .pg{display:none}.pg.on{display:block}
@@ -176,14 +211,14 @@ td.ic{width:100px}
   .kpi-grid{grid-template-columns:repeat(2,1fr)}
 }
 @media(max-width:600px){
-  .hdr{padding:8px 12px;gap:8px}
-  .hdr-mid h1{font-size:11px}
-  .hdr-mid .sub{display:none}
-  .fp-lbl{font-size:9px;padding:0 6px}
+  .hdr-top{padding:12px 14px;gap:10px}
+  .logo{width:40px;height:40px;font-size:19px}
+  .hdr-title h1{font-size:13px}
+  .hdr-title .sub{font-size:10px}
+  .hdr-bot{top:70px;padding:0 10px}
+  .tab{font-size:12px;padding:10px 12px;gap:4px}
+  .fp-lbl{font-size:9px;padding:0 7px}
   .fp select{font-size:11px;padding:0 5px}
-  .fp-locked{font-size:10px;padding:0 7px}
-  .tabs{padding:0 8px;top:57px}
-  .tab{font-size:12px;padding:9px 12px;gap:4px}
   .wrap,.wrap-sm{padding:10px}
   .kpi-grid{gap:8px}
   .kpi{padding:11px 12px}
@@ -200,7 +235,7 @@ td.ic{width:100px}
 }
 @media(max-width:400px){
   .kpi-grid{grid-template-columns:repeat(2,1fr)}
-  .hdr-mid h1{-webkit-line-clamp:1}
+  .hdr-title h1{font-size:12px}
 }
 </style>
 </head>
@@ -209,20 +244,27 @@ td.ic{width:100px}
 <div id="lov"><div class="spc"></div><p style="font-size:12px;color:#64748b;">กำลังโหลดข้อมูล...</p></div>
 <div class="toast" id="toast"><span id="tico"></span><span id="tmsg"></span></div>
 
-<!-- HEADER -->
-<div class="hdr">
+<!-- HEADER ROW 1: TITLE -->
+<div class="hdr-top">
   <div class="logo">🏆</div>
-  <div class="hdr-mid">
+  <div class="hdr-title">
     <h1>รายงานผลการปฏิบัติของคณะกรรมการกีฬาประจำจังหวัด</h1>
     <div class="sub">ตามโครงการส่งเสริมการกีฬาเพื่อพัฒนาชาติไทย ในพระบรมราชูปถัมภ์ &nbsp;•&nbsp; จังหวัดหนองบัวลำภู &nbsp;•&nbsp; <span id="period-label"></span></div>
   </div>
-  <!-- Fiscal Picker: locked to latest month, unlock via dropdown -->
+</div>
+
+<!-- HEADER ROW 2: TABS + FISCAL PICKER -->
+<div class="hdr-bot">
+  <div class="tabs">
+    <button class="tab on" onclick="switchTab('dash')" id="tab-dash">📊 ภาพรวม</button>
+    <button class="tab" onclick="switchTab('entry')" id="tab-entry">📝 กรอกข้อมูล</button>
+  </div>
   <div class="fp" id="fp-main">
     <div class="fp-lbl">
       <svg viewBox="0 0 24 24"><path d="M19 4h-1V2h-2v2H8V2H6v2H5C3.9 4 3 4.9 3 6v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11z"/></svg>
       ปีงบประมาณ
     </div>
-    <select id="sel-month" onchange="onPeriodChange()" class="fp" style="border:none;border-radius:0;height:36px;font-size:12px;font-weight:700;color:#1e3a8a;padding:0 8px;outline:none;cursor:pointer;background:#fff;">
+    <select id="sel-month" onchange="onPeriodChange()">
       <option value="9">ตุลาคม</option><option value="10">พฤศจิกายน</option>
       <option value="11">ธันวาคม</option><option value="0">มกราคม</option>
       <option value="1">กุมภาพันธ์</option><option value="2">มีนาคม</option>
@@ -231,16 +273,10 @@ td.ic{width:100px}
       <option value="7">สิงหาคม</option><option value="8">กันยายน</option>
     </select>
     <div class="fp-div"></div>
-    <select id="sel-year" onchange="onPeriodChange()" class="fp" style="border:none;border-radius:0;height:36px;font-size:12px;font-weight:700;color:#1e3a8a;padding:0 8px;outline:none;cursor:pointer;background:#fff;">
+    <select id="sel-year" onchange="onPeriodChange()">
       <option>2566</option><option>2567</option><option>2568</option><option selected>2569</option><option>2570</option>
     </select>
   </div>
-</div>
-
-<!-- TABS -->
-<div class="tabs">
-  <button class="tab on" onclick="switchTab('dash')" id="tab-dash">📊 ภาพรวม</button>
-  <button class="tab" onclick="switchTab('entry')" id="tab-entry">📝 กรอกข้อมูล</button>
 </div>
 
 <!-- ═══════════════ DASHBOARD ═══════════════ -->

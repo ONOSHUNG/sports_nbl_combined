@@ -1,750 +1,641 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>ผลการปฏิบัติงาน • คณะกรรมการกีฬาจังหวัดหนองบัวลำภู</title>
-<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>รายงานผลการปฏิบัติงานกีฬา • จังหวัดหนองบัวลำภู</title>
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;600;700&display=swap" rel="stylesheet"/>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <style>
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-:root {
-  --bg: #f8fafc; --surface: #ffffff; --border: #e2e8f0;
-  --text-primary: #0f172a; --text-secondary: #64748b; --text-muted: #94a3b8;
-  --blue: #2563eb; --blue-dark: #1d4ed8; --blue-light: #dbeafe;
-  --indigo: #4f46e5; --emerald: #059669; --emerald-light: #d1fae5;
-  --red: #dc2626; --red-light: #fee2e2; --purple: #7c3aed;
-  --radius: 12px; --radius-sm: 8px;
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#f1f5f9;--surface:#fff;--border:#e2e8f0;
+  --text:#0f172a;--text2:#64748b;--text3:#94a3b8;
+  --blue:#2563eb;--blue2:#1d4ed8;--blue-lt:#dbeafe;
+  --indigo:#4f46e5;--green:#059669;--green-lt:#d1fae5;
+  --red:#dc2626;--red-lt:#fee2e2;--amber:#d97706;
+  --r:12px;--r2:8px;
 }
-body { font-family:'Sarabun',sans-serif; background:var(--bg); color:var(--text-primary); font-size:15px; min-height:100vh; }
+body{font-family:'Sarabun',sans-serif;background:var(--bg);color:var(--text);font-size:15px;min-height:100vh}
 
 /* ── HEADER ── */
-.header {
-  background:var(--surface); border-bottom:1px solid var(--border);
-  padding:14px 24px; display:flex; align-items:center;
-  gap:12px; position:sticky; top:0; z-index:100; flex-wrap:wrap;
+.hdr{
+  background:#0f172a;border-bottom:3px solid var(--blue);
+  padding:10px 16px;display:flex;align-items:center;gap:10px;
+  position:sticky;top:0;z-index:100;
 }
-.logo {
-  width:40px; height:40px; border-radius:var(--radius-sm);
-  background:linear-gradient(135deg,#2563eb,#4f46e5);
-  display:flex; align-items:center; justify-content:center;
-  font-size:18px; flex-shrink:0;
+.logo{
+  width:38px;height:38px;border-radius:9px;flex-shrink:0;
+  background:linear-gradient(135deg,#2563eb,#7c3aed);
+  display:flex;align-items:center;justify-content:center;
+  font-size:18px;border:2px solid rgba(255,255,255,.15);
 }
-.header-title { flex:1; min-width:0; }
-.header-title h1 { font-size:17px; font-weight:700; color:var(--text-primary); }
-.header-title .sub { font-size:12px; color:var(--text-secondary); margin-top:1px; }
+.hdr-mid{flex:1;min-width:0;text-align:center;padding:0 6px}
+.hdr-mid h1{font-size:13px;font-weight:700;color:#fff;line-height:1.35;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.hdr-mid .sub{font-size:10px;color:#64748b;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+/* fiscal picker */
+.fp{display:flex;align-items:center;border:1.5px solid #1d4ed8;border-radius:9px;overflow:hidden;background:#fff;flex-shrink:0}
+.fp-lbl{background:#1d4ed8;color:#fff;font-size:10px;font-weight:700;letter-spacing:.04em;padding:0 8px;height:36px;display:flex;align-items:center;gap:4px;white-space:nowrap;font-family:'Sarabun',sans-serif}
+.fp-lbl svg{width:12px;height:12px;fill:#fff;flex-shrink:0}
+.fp-div{width:1px;background:#bfdbfe;height:36px;flex-shrink:0}
+.fp select{font-family:'Sarabun',sans-serif;font-size:12px;font-weight:700;color:#1e3a8a;background:transparent;border:none;outline:none;cursor:pointer;padding:0 8px;height:36px}
+.fp-locked{font-size:11px;font-weight:700;color:#1e3a8a;padding:0 10px;display:flex;align-items:center;gap:5px;white-space:nowrap}
+.lock-icon{font-size:12px}
 
 /* ── TAB BAR ── */
-.tab-bar {
-  background:var(--surface); border-bottom:1px solid var(--border);
-  display:flex; padding:0 24px; gap:0; position:sticky; top:69px; z-index:99;
-}
-.tab-btn {
-  font-family:'Sarabun',sans-serif; font-size:14px; font-weight:500;
-  color:var(--text-muted); padding:12px 20px; border:none; background:none;
-  cursor:pointer; border-bottom:2px solid transparent; transition:all .15s;
-  display:flex; align-items:center; gap:7px; white-space:nowrap;
-}
-.tab-btn:hover { color:var(--text-secondary); }
-.tab-btn.active { color:var(--blue); border-bottom-color:var(--blue); font-weight:600; }
-.tab-icon { font-size:15px; }
-
-/* ── PERIOD FILTER (header right) ── */
-.filter-group {
-  display:flex; align-items:center; gap:6px;
-  background:var(--bg); border:1px solid var(--border);
-  border-radius:var(--radius-sm); padding:6px 12px;
-}
-.filter-group select {
-  font-family:'Sarabun',sans-serif; font-size:13px; font-weight:500;
-  color:var(--text-primary); background:transparent; border:none; outline:none; cursor:pointer;
-}
-.filter-icon { font-size:14px; }
+.tabs{background:#1e293b;border-bottom:1px solid #334155;display:flex;padding:0 16px;position:sticky;top:61px;z-index:99;overflow-x:auto;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{font-family:'Sarabun',sans-serif;font-size:13px;font-weight:500;color:#64748b;padding:10px 16px;border:none;background:none;cursor:pointer;border-bottom:2px solid transparent;transition:all .15s;display:flex;align-items:center;gap:6px;white-space:nowrap;flex-shrink:0}
+.tab:hover{color:#94a3b8}
+.tab.on{color:#60a5fa;border-bottom-color:#2563eb;font-weight:600}
 
 /* ── PAGES ── */
-.page { display:none; }
-.page.active { display:block; }
+.pg{display:none}.pg.on{display:block}
 
-/* ── MAIN WRAPPER ── */
-.main { max-width:1200px; margin:0 auto; padding:24px 20px; }
-.main-entry { max-width:860px; margin:0 auto; padding:24px 20px 48px; }
+/* ── LAYOUT ── */
+.wrap{max-width:1200px;margin:0 auto;padding:16px}
+.wrap-sm{max-width:860px;margin:0 auto;padding:16px 16px 48px}
 
-/* ── KPI CARDS ── */
-.kpi-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-bottom:24px; }
-.kpi-card {
-  background:var(--surface); border:1px solid var(--border);
-  border-radius:var(--radius); padding:18px 20px; transition:box-shadow .2s;
-}
-.kpi-card:hover { box-shadow:0 4px 16px rgba(0,0,0,.07); }
-.kpi-top { display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; }
-.kpi-icon { font-size:22px; }
-.kpi-dot { width:8px; height:8px; border-radius:50%; }
-.kpi-label { font-size:12px; color:var(--text-secondary); margin-bottom:4px; }
-.kpi-value { font-size:28px; font-weight:700; color:var(--text-primary); line-height:1; }
-.kpi-suffix { font-size:11px; color:var(--text-muted); margin-top:4px; }
+/* ── KPI ── */
+.kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px}
+.kpi{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:14px 16px;transition:box-shadow .2s}
+.kpi:hover{box-shadow:0 4px 14px rgba(0,0,0,.07)}
+.kpi-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.kpi-ico{font-size:20px}
+.kpi-dot{width:7px;height:7px;border-radius:50%}
+.kpi-lbl{font-size:11px;color:var(--text2);margin-bottom:3px}
+.kpi-val{font-size:24px;font-weight:700;color:var(--text);line-height:1}
+.kpi-sfx{font-size:10px;color:var(--text3);margin-top:3px}
 
-/* ── SECTION ── */
-.section-title { font-size:13px; font-weight:600; color:var(--text-secondary); margin-bottom:14px; letter-spacing:.02em; }
-.charts-row { display:grid; grid-template-columns:1fr 340px; gap:16px; margin-bottom:20px; }
-.card { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:20px; }
-.legend { display:flex; gap:16px; margin-bottom:14px; flex-wrap:wrap; }
-.legend-item { display:flex; align-items:center; gap:6px; font-size:12px; color:var(--text-secondary); }
-.legend-box { width:10px; height:10px; border-radius:2px; }
+/* ── CARDS ── */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:16px}
+.card+.card,.card+div{margin-top:14px}
+.sec{font-size:12px;font-weight:600;color:var(--text2);margin-bottom:12px;letter-spacing:.02em}
 
-/* ── HORIZONTAL BARS ── */
-.bar-list { display:flex; flex-direction:column; gap:10px; }
-.bar-row { display:flex; align-items:center; gap:10px; }
-.bar-name { width:140px; font-size:12px; color:var(--text-secondary); text-align:right; flex-shrink:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-.bar-track { flex:1; height:16px; background:#f1f5f9; border-radius:4px; overflow:hidden; }
-.bar-fill { height:100%; border-radius:4px; background:linear-gradient(90deg,#2563eb,#4f46e5); transition:width .8s ease; }
-.bar-val { width:52px; font-size:12px; font-weight:600; color:var(--text-primary); text-align:right; }
-
-/* ── TABLE (dashboard) ── */
-.table-wrap { overflow-x:auto; }
-table { width:100%; border-collapse:collapse; font-size:13px; }
-thead th {
-  padding:10px 12px; text-align:left; font-size:11px; font-weight:600;
-  color:var(--text-secondary); background:#f8fafc; border-bottom:1px solid var(--border);
-  cursor:pointer; user-select:none; white-space:nowrap;
-}
-thead th:hover { color:var(--text-primary); }
-thead th.sort-asc::after { content:' ▲'; font-size:9px; }
-thead th.sort-desc::after { content:' ▼'; font-size:9px; }
-tbody tr { border-bottom:1px solid #f1f5f9; transition:background .15s; }
-tbody tr:last-child { border-bottom:none; }
-tbody tr:hover { background:#f8fafc; }
-tbody td { padding:10px 12px; color:var(--text-primary); }
-tfoot td { padding:10px 12px; background:#f1f5f9; font-weight:700; font-size:13px; border-top:1px solid var(--border); }
-.num { text-align:right; font-weight:600; font-variant-numeric:tabular-nums; }
-.badge { display:inline-flex; align-items:center; gap:4px; font-size:11px; font-weight:500; padding:3px 8px; border-radius:99px; }
-.badge-active { background:var(--emerald-light); color:#065f46; }
-.badge-idle { background:#f1f5f9; color:var(--text-muted); }
-.badge-dot { width:5px; height:5px; border-radius:50%; }
-.badge-active .badge-dot { background:var(--emerald); }
-.badge-idle .badge-dot { background:var(--text-muted); }
+/* ── CHARTS ROW ── */
+.charts-row{display:grid;grid-template-columns:1fr 300px;gap:14px;margin-bottom:14px}
 
 /* ── DONUT ── */
-.donut-wrap { display:flex; flex-direction:column; align-items:center; gap:16px; }
-.donut-legend { width:100%; }
-.donut-legend-item { display:flex; align-items:center; gap:8px; font-size:12px; padding:4px 0; border-bottom:1px solid #f1f5f9; }
-.donut-legend-item:last-child { border-bottom:none; }
-.dl-dot { width:10px; height:10px; border-radius:2px; flex-shrink:0; }
-.dl-name { flex:1; color:var(--text-secondary); }
-.dl-pct { font-weight:600; color:var(--text-primary); }
+.donut-wrap{display:flex;flex-direction:column;align-items:center;gap:12px}
+.dl-item{display:flex;align-items:center;gap:7px;font-size:11px;padding:3px 0;border-bottom:1px solid #f1f5f9;width:100%}
+.dl-item:last-child{border-bottom:none}
+.dl-dot{width:9px;height:9px;border-radius:2px;flex-shrink:0}
+.dl-name{flex:1;color:var(--text2)}
+.dl-pct{font-weight:600;color:var(--text)}
+
+/* ── LEGEND ── */
+.lgd{display:flex;gap:14px;margin-bottom:10px;flex-wrap:wrap}
+.lgd-item{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text2)}
+.lgd-box{width:9px;height:9px;border-radius:2px}
+
+/* ── HORIZONTAL BAR (overview) ── */
+.brow{display:flex;align-items:center;gap:8px;margin-bottom:7px}
+.bname{width:130px;font-size:11px;color:var(--text2);text-align:right;flex-shrink:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.btrack{flex:1;height:14px;background:#f1f5f9;border-radius:3px;overflow:hidden}
+.bfill{height:100%;border-radius:3px;background:linear-gradient(90deg,#2563eb,#4f46e5);transition:width .7s ease}
+.bval{width:48px;font-size:11px;font-weight:600;color:var(--text);text-align:right}
+
+/* ── TABLE ── */
+.tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+table{width:100%;border-collapse:collapse;font-size:12px;min-width:480px}
+thead th{padding:9px 10px;text-align:left;font-size:10px;font-weight:600;color:var(--text2);background:#f8fafc;border-bottom:1px solid var(--border);cursor:pointer;user-select:none;white-space:nowrap}
+thead th:hover{color:var(--text)}
+thead th.sa::after{content:' ▲';font-size:8px}
+thead th.sd::after{content:' ▼';font-size:8px}
+tbody tr{border-bottom:1px solid #f8fafc;transition:background .1s}
+tbody tr:last-child{border-bottom:none}
+tbody tr:hover{background:#f8fafc}
+tbody td{padding:9px 10px;color:var(--text)}
+tfoot td{padding:9px 10px;background:#f1f5f9;font-weight:700;font-size:12px;border-top:1px solid var(--border)}
+.nr{text-align:right;font-weight:600;font-variant-numeric:tabular-nums}
+.bdg{display:inline-flex;align-items:center;gap:3px;font-size:10px;font-weight:500;padding:2px 7px;border-radius:99px}
+.bdg-on{background:var(--green-lt);color:#065f46}
+.bdg-off{background:#f1f5f9;color:var(--text3)}
+.bdg-d{width:4px;height:4px;border-radius:50%}
+.bdg-on .bdg-d{background:var(--green)}
+.bdg-off .bdg-d{background:var(--text3)}
 
 /* ── ENTRY FORM ── */
-.period-card {
-  background:var(--surface); border:1px solid var(--border);
-  border-radius:var(--radius); padding:16px 20px; margin-bottom:20px;
-  display:flex; align-items:center; gap:14px; flex-wrap:wrap;
-}
-.period-card label { font-size:13px; font-weight:600; color:var(--text-secondary); }
-.period-card select {
-  font-family:'Sarabun',sans-serif; font-size:14px; font-weight:600;
-  color:var(--text-primary); background:var(--bg); border:1px solid var(--border);
-  border-radius:var(--radius-sm); padding:7px 12px; cursor:pointer; outline:none;
-}
-.period-card select:focus { border-color:var(--blue); }
-.period-display {
-  margin-left:auto; font-size:13px; background:var(--blue-light);
-  color:#1e40af; border-radius:99px; padding:4px 14px; font-weight:600;
-}
-.form-card { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); overflow:hidden; margin-bottom:20px; }
-.form-card-header { padding:14px 20px; border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; }
-.form-card-header h2 { font-size:14px; font-weight:600; color:var(--text-secondary); }
-.count-badge { font-size:12px; background:var(--bg); border:1px solid var(--border); border-radius:99px; padding:3px 10px; color:var(--text-muted); }
-td.num-col { font-size:11px; color:var(--text-muted); text-align:center; width:32px; }
-td.name-col { max-width:220px; }
-.act-name { font-weight:500; color:var(--text-primary); font-size:13px; }
-.act-unit { font-size:11px; color:var(--text-muted); margin-top:1px; }
-td.input-col { width:110px; }
-.num-input {
-  font-family:'Sarabun',sans-serif; width:100%; padding:7px 10px;
-  font-size:14px; font-weight:600; text-align:right; color:var(--text-primary);
-  background:var(--bg); border:1px solid var(--border); border-radius:var(--radius-sm);
-  outline:none; transition:border-color .15s, background .15s;
-}
-.num-input:focus { border-color:var(--blue); background:#fff; }
-.num-input.has-value { background:var(--blue-light); border-color:#93c5fd; color:#1d4ed8; }
-.num-input.cumul-input.has-value { background:#ede9fe; border-color:#c4b5fd; color:#5b21b6; }
-#efoot-monthly { color:#1d4ed8; }
-#efoot-cumul   { color:#5b21b6; }
+.period-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:14px 16px;margin-bottom:14px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.period-card label{font-size:12px;font-weight:600;color:var(--text2)}
+.pdis{font-size:12px;background:var(--blue-lt);color:#1e40af;border-radius:99px;padding:4px 12px;font-weight:600;margin-left:auto}
+.fcard{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;margin-bottom:14px}
+.fcard-hdr{padding:12px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.fcard-hdr h2{font-size:13px;font-weight:600;color:var(--text2)}
+.cbdg{font-size:11px;background:var(--bg);border:1px solid var(--border);border-radius:99px;padding:2px 9px;color:var(--text3)}
+td.nc{font-size:10px;color:var(--text3);text-align:center;width:28px}
+td.nmc{max-width:200px}
+.aname{font-weight:500;color:var(--text);font-size:12px}
+.aunit{font-size:10px;color:var(--text3);margin-top:1px}
+td.ic{width:100px}
+.ni{font-family:'Sarabun',sans-serif;width:100%;padding:6px 8px;font-size:13px;font-weight:600;text-align:right;color:var(--text);background:var(--bg);border:1px solid var(--border);border-radius:var(--r2);outline:none;transition:border-color .15s,background .15s}
+.ni:focus{border-color:var(--blue);background:#fff}
+.ni.hv{background:var(--blue-lt);border-color:#93c5fd;color:#1d4ed8}
+.ni.cv.hv{background:#ede9fe;border-color:#c4b5fd;color:#5b21b6}
+#ef-m{color:#1d4ed8}#ef-c{color:#5b21b6}
 
 /* ── BUTTONS ── */
-.action-row { display:flex; align-items:center; gap:12px; flex-wrap:wrap; }
-.btn {
-  font-family:'Sarabun',sans-serif; font-size:14px; font-weight:600;
-  padding:11px 22px; border-radius:var(--radius-sm); border:none;
-  cursor:pointer; transition:all .15s; display:flex; align-items:center; gap:8px;
-}
-.btn-primary { background:var(--blue); color:#fff; }
-.btn-primary:hover:not(:disabled) { background:var(--blue-dark); transform:translateY(-1px); }
-.btn-primary:disabled { background:#93c5fd; cursor:not-allowed; }
-.btn-secondary { background:var(--surface); color:var(--text-secondary); border:1px solid var(--border); }
-.btn-secondary:hover { background:var(--bg); color:var(--text-primary); }
-.btn-danger { background:var(--surface); color:var(--red); border:1px solid #fecaca; }
-.btn-danger:hover { background:var(--red-light); }
-.spinner { width:16px; height:16px; border:2px solid rgba(255,255,255,.4); border-top-color:#fff; border-radius:50%; animation:spin .7s linear infinite; display:none; }
-
-/* ── PROGRESS BAR ── */
-.progress-bar { height:3px; background:var(--border); border-radius:99px; overflow:hidden; margin-bottom:20px; display:none; }
-.progress-fill { height:100%; background:var(--blue); border-radius:99px; width:0%; transition:width .4s ease; }
+.act-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.btn{font-family:'Sarabun',sans-serif;font-size:13px;font-weight:600;padding:10px 18px;border-radius:var(--r2);border:none;cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:7px}
+.btn-p{background:var(--blue);color:#fff}
+.btn-p:hover:not(:disabled){background:var(--blue2);transform:translateY(-1px)}
+.btn-p:disabled{background:#93c5fd;cursor:not-allowed}
+.btn-s{background:var(--surface);color:var(--text2);border:1px solid var(--border)}
+.btn-s:hover{background:var(--bg);color:var(--text)}
+.btn-d{background:var(--surface);color:var(--red);border:1px solid #fecaca}
+.btn-d:hover{background:var(--red-lt)}
+.spin{width:14px;height:14px;border:2px solid rgba(255,255,255,.4);border-top-color:#fff;border-radius:50%;animation:rot .7s linear infinite;display:none}
+.pbar{height:3px;background:var(--border);border-radius:99px;overflow:hidden;margin-bottom:14px;display:none}
+.pfill{height:100%;background:var(--blue);border-radius:99px;width:0%;transition:width .4s ease}
 
 /* ── TOAST ── */
-.toast {
-  position:fixed; bottom:24px; left:50%; transform:translateX(-50%) translateY(80px);
-  background:var(--text-primary); color:#fff; padding:12px 20px;
-  border-radius:var(--radius-sm); font-size:14px; font-weight:500;
-  display:flex; align-items:center; gap:10px;
-  box-shadow:0 8px 24px rgba(0,0,0,.2); transition:transform .3s ease; z-index:999; white-space:nowrap;
-}
-.toast.show { transform:translateX(-50%) translateY(0); }
-.toast.success { background:#065f46; }
-.toast.error   { background:#991b1b; }
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--text);color:#fff;padding:11px 18px;border-radius:var(--r2);font-size:13px;font-weight:500;display:flex;align-items:center;gap:8px;box-shadow:0 6px 20px rgba(0,0,0,.2);transition:transform .3s;z-index:999;max-width:90vw;text-align:center}
+.toast.on{transform:translateX(-50%) translateY(0)}
+.toast.ok{background:#065f46}
+.toast.er{background:#991b1b}
 
-/* ── LOADING OVERLAY ── */
-#loading-overlay {
-  display:none; position:fixed; inset:0;
-  background:rgba(248,250,252,.8); z-index:200;
-  align-items:center; justify-content:center; flex-direction:column; gap:12px;
-}
-.spin-circle { width:36px; height:36px; border:3px solid #e2e8f0; border-top-color:var(--blue); border-radius:50%; animation:spin .7s linear infinite; }
-@keyframes spin { to { transform:rotate(360deg); } }
+/* ── LOADING ── */
+#lov{display:none;position:fixed;inset:0;background:rgba(241,245,249,.85);z-index:200;align-items:center;justify-content:center;flex-direction:column;gap:10px}
+.spc{width:34px;height:34px;border:3px solid #e2e8f0;border-top-color:var(--blue);border-radius:50%;animation:rot .7s linear infinite}
+@keyframes rot{to{transform:rotate(360deg)}}
 
-/* ── ERROR BANNER ── */
-.error-banner { display:none; background:#fee2e2; border:1px solid #fecaca; border-radius:8px; padding:10px 16px; margin-bottom:16px; font-size:13px; color:#991b1b; }
+/* ── ERROR ── */
+.errbanner{display:none;background:#fee2e2;border:1px solid #fecaca;border-radius:var(--r2);padding:9px 14px;margin-bottom:12px;font-size:12px;color:#991b1b}
 
 /* ── FOOTER ── */
-.footer { text-align:center; font-size:11px; color:var(--text-muted); padding:24px 0; border-top:1px solid var(--border); margin-top:24px; }
+.ft{text-align:center;font-size:10px;color:var(--text3);padding:20px 0;border-top:1px solid var(--border);margin-top:16px}
 
-/* ── RESPONSIVE ── */
-@media(max-width:900px) { .charts-row { grid-template-columns:1fr; } .kpi-grid { grid-template-columns:repeat(2,1fr); } }
-@media(max-width:600px) {
-  .bar-name { width:90px; }
-  .period-display { margin-left:0; }
-  td.input-col { width:90px; }
-  .num-input { font-size:13px; padding:6px 8px; }
-  .tab-btn { font-size:13px; padding:10px 14px; }
+/* ── LOCKED MONTH BADGE ── */
+.lock-badge{display:inline-flex;align-items:center;gap:5px;background:#1e3a8a;color:#bfdbfe;font-size:10px;font-weight:600;padding:3px 10px;border-radius:99px;margin-left:6px}
+
+/* ════ RESPONSIVE ════ */
+@media(max-width:960px){
+  .charts-row{grid-template-columns:1fr}
+  .kpi-grid{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:600px){
+  .hdr{padding:8px 12px;gap:8px}
+  .hdr-mid h1{font-size:11px}
+  .hdr-mid .sub{display:none}
+  .fp-lbl{font-size:9px;padding:0 6px}
+  .fp select{font-size:11px;padding:0 5px}
+  .fp-locked{font-size:10px;padding:0 7px}
+  .tabs{padding:0 8px;top:57px}
+  .tab{font-size:12px;padding:9px 12px;gap:4px}
+  .wrap,.wrap-sm{padding:10px}
+  .kpi-grid{gap:8px}
+  .kpi{padding:11px 12px}
+  .kpi-val{font-size:20px}
+  .kpi-lbl{font-size:10px}
+  .bname{width:85px;font-size:10px}
+  .card{padding:12px}
+  td.ic{width:80px}
+  .ni{font-size:12px;padding:5px 6px}
+  .btn{font-size:12px;padding:9px 14px}
+  .period-card{gap:8px}
+  .pdis{margin-left:0}
+  .act-row{gap:8px}
+}
+@media(max-width:400px){
+  .kpi-grid{grid-template-columns:repeat(2,1fr)}
+  .hdr-mid h1{-webkit-line-clamp:1}
 }
 </style>
 </head>
 <body>
 
-<!-- LOADING -->
-<div id="loading-overlay">
-  <div class="spin-circle"></div>
-  <p style="font-size:13px;color:var(--text-secondary);">กำลังโหลดข้อมูล...</p>
-</div>
-
-<!-- TOAST -->
-<div class="toast" id="toast">
-  <span id="toast-icon"></span>
-  <span id="toast-msg"></span>
-</div>
+<div id="lov"><div class="spc"></div><p style="font-size:12px;color:#64748b;">กำลังโหลดข้อมูล...</p></div>
+<div class="toast" id="toast"><span id="tico"></span><span id="tmsg"></span></div>
 
 <!-- HEADER -->
-<div class="header">
+<div class="hdr">
   <div class="logo">🏆</div>
-  <div class="header-title">
-    <h1>ผลการปฏิบัติงานกีฬา</h1>
-    <div class="sub">คณะกรรมการกีฬาจังหวัดหนองบัวลำภู • <span id="period-label"></span></div>
+  <div class="hdr-mid">
+    <h1>รายงานผลการปฏิบัติของคณะกรรมการกีฬาประจำจังหวัด</h1>
+    <div class="sub">ตามโครงการส่งเสริมการกีฬาเพื่อพัฒนาชาติไทย ในพระบรมราชูปถัมภ์ &nbsp;•&nbsp; จังหวัดหนองบัวลำภู &nbsp;•&nbsp; <span id="period-label"></span></div>
   </div>
-  <div class="filter-group">
-    <span class="filter-icon">📅</span>
-    <select id="sel-month" onchange="onPeriodChange()">
-      <option value="0">มกราคม</option><option value="1">กุมภาพันธ์</option>
-      <option value="2">มีนาคม</option><option value="3">เมษายน</option>
-      <option value="4">พฤษภาคม</option><option value="5">มิถุนายน</option>
-      <option value="6">กรกฎาคม</option><option value="7">สิงหาคม</option>
-      <option value="8">กันยายน</option><option value="9">ตุลาคม</option>
-      <option value="10">พฤศจิกายน</option><option value="11">ธันวาคม</option>
+  <!-- Fiscal Picker: locked to latest month, unlock via dropdown -->
+  <div class="fp" id="fp-main">
+    <div class="fp-lbl">
+      <svg viewBox="0 0 24 24"><path d="M19 4h-1V2h-2v2H8V2H6v2H5C3.9 4 3 4.9 3 6v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11z"/></svg>
+      ปีงบประมาณ
+    </div>
+    <select id="sel-month" onchange="onPeriodChange()" class="fp" style="border:none;border-radius:0;height:36px;font-size:12px;font-weight:700;color:#1e3a8a;padding:0 8px;outline:none;cursor:pointer;background:#fff;">
+      <option value="9">ตุลาคม</option><option value="10">พฤศจิกายน</option>
+      <option value="11">ธันวาคม</option><option value="0">มกราคม</option>
+      <option value="1">กุมภาพันธ์</option><option value="2">มีนาคม</option>
+      <option value="3">เมษายน</option><option value="4">พฤษภาคม</option>
+      <option value="5">มิถุนายน</option><option value="6">กรกฎาคม</option>
+      <option value="7">สิงหาคม</option><option value="8">กันยายน</option>
     </select>
-    <select id="sel-year" onchange="onPeriodChange()">
-      <option>2567</option><option>2568</option><option selected>2569</option><option>2570</option>
+    <div class="fp-div"></div>
+    <select id="sel-year" onchange="onPeriodChange()" class="fp" style="border:none;border-radius:0;height:36px;font-size:12px;font-weight:700;color:#1e3a8a;padding:0 8px;outline:none;cursor:pointer;background:#fff;">
+      <option>2566</option><option>2567</option><option>2568</option><option selected>2569</option><option>2570</option>
     </select>
   </div>
 </div>
 
-<!-- TAB BAR -->
-<div class="tab-bar">
-  <button class="tab-btn active" onclick="switchTab('dashboard')" id="tab-dashboard">
-    <span class="tab-icon">📊</span> ภาพรวม
-  </button>
-  <button class="tab-btn" onclick="switchTab('entry')" id="tab-entry">
-    <span class="tab-icon">📝</span> กรอกข้อมูล
-  </button>
+<!-- TABS -->
+<div class="tabs">
+  <button class="tab on" onclick="switchTab('dash')" id="tab-dash">📊 ภาพรวม</button>
+  <button class="tab" onclick="switchTab('entry')" id="tab-entry">📝 กรอกข้อมูล</button>
 </div>
 
-<!-- ════════════════════════════════ PAGE: DASHBOARD ════════════════════════════════ -->
-<div class="page active" id="page-dashboard">
-<div class="main">
-  <div class="error-banner" id="error-banner"></div>
+<!-- ═══════════════ DASHBOARD ═══════════════ -->
+<div class="pg on" id="pg-dash">
+<div class="wrap">
+  <div class="errbanner" id="errbanner"></div>
 
   <!-- KPI -->
   <div class="kpi-grid">
-    <div class="kpi-card">
-      <div class="kpi-top"><span class="kpi-icon">📋</span><span class="kpi-dot" style="background:#2563eb"></span></div>
-      <div class="kpi-label">จำนวนกิจกรรมทั้งหมด</div>
-      <div class="kpi-value" id="kpi-total">-</div>
-      <div class="kpi-suffix">รายการ</div>
+    <div class="kpi">
+      <div class="kpi-top"><span class="kpi-ico">📋</span><span class="kpi-dot" style="background:#2563eb"></span></div>
+      <div class="kpi-lbl">กิจกรรมทั้งหมด</div>
+      <div class="kpi-val" id="kpi-total">-</div>
+      <div class="kpi-sfx">รายการ</div>
     </div>
-    <div class="kpi-card">
-      <div class="kpi-top"><span class="kpi-icon">⚡</span><span class="kpi-dot" style="background:#059669"></span></div>
-      <div class="kpi-label">ดำเนินการเดือนนี้</div>
-      <div class="kpi-value" id="kpi-active">-</div>
-      <div class="kpi-suffix">รายการ</div>
+    <div class="kpi">
+      <div class="kpi-top"><span class="kpi-ico">⚡</span><span class="kpi-dot" style="background:#059669"></span></div>
+      <div class="kpi-lbl">ดำเนินการเดือนนี้</div>
+      <div class="kpi-val" id="kpi-active">-</div>
+      <div class="kpi-sfx">รายการ</div>
     </div>
-    <div class="kpi-card">
-      <div class="kpi-top"><span class="kpi-icon">📊</span><span class="kpi-dot" style="background:#4f46e5"></span></div>
-      <div class="kpi-label">ผลงานประจำเดือน</div>
-      <div class="kpi-value" id="kpi-monthly">-</div>
-      <div class="kpi-suffix">ครั้ง/คน</div>
+    <div class="kpi">
+      <div class="kpi-top"><span class="kpi-ico">📊</span><span class="kpi-dot" style="background:#4f46e5"></span></div>
+      <div class="kpi-lbl">ผลงานประจำเดือน</div>
+      <div class="kpi-val" id="kpi-monthly">-</div>
+      <div class="kpi-sfx">ครั้ง/คน</div>
     </div>
-    <div class="kpi-card">
-      <div class="kpi-top"><span class="kpi-icon">🏆</span><span class="kpi-dot" style="background:#d97706"></span></div>
-      <div class="kpi-label">ผลงานสะสมรวม</div>
-      <div class="kpi-value" id="kpi-cumul">-</div>
-      <div class="kpi-suffix">ครั้ง/คน</div>
+    <div class="kpi">
+      <div class="kpi-top"><span class="kpi-ico">🏆</span><span class="kpi-dot" style="background:#d97706"></span></div>
+      <div class="kpi-lbl">ผลงานสะสมรวม</div>
+      <div class="kpi-val" id="kpi-cumul">-</div>
+      <div class="kpi-sfx">ครั้ง/คน</div>
     </div>
   </div>
 
-  <!-- CHARTS ROW -->
+  <!-- CHARTS ROW: horizontal compare + donut -->
   <div class="charts-row">
+    <!-- Horizontal compare chart ALL activities -->
     <div class="card">
-      <div class="section-title">เปรียบเทียบผลงานรายเดือน vs สะสม (Top 8)</div>
-      <div class="legend">
-        <span class="legend-item"><span class="legend-box" style="background:#93c5fd"></span>เดือนนี้</span>
-        <span class="legend-item"><span class="legend-box" style="background:#2563eb"></span>สะสม</span>
+      <div class="sec">เปรียบเทียบผลงานรายเดือน vs สะสม (ทุกกิจกรรม)</div>
+      <div class="lgd">
+        <span class="lgd-item"><span class="lgd-box" style="background:#93c5fd"></span>เดือนนี้</span>
+        <span class="lgd-item"><span class="lgd-box" style="background:#2563eb"></span>สะสม</span>
       </div>
-      <div style="position:relative;width:100%;height:240px;"><canvas id="chartCompare"></canvas></div>
+      <div id="compare-wrap" style="position:relative;width:100%;">
+        <canvas id="chartCompare"></canvas>
+      </div>
     </div>
+    <!-- Donut top 5 -->
     <div class="card">
-      <div class="section-title">Top 5 กิจกรรมสะสม</div>
+      <div class="sec">Top 5 กิจกรรมสะสม</div>
       <div class="donut-wrap">
-        <div style="position:relative;width:160px;height:160px;">
+        <div style="position:relative;width:150px;height:150px;">
           <canvas id="chartDonut"></canvas>
           <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;pointer-events:none;">
-            <div style="font-size:11px;color:#64748b;">สะสมรวม</div>
-            <div id="donut-total" style="font-size:16px;font-weight:700;color:#0f172a;"></div>
+            <div style="font-size:10px;color:#64748b;">สะสมรวม</div>
+            <div id="donut-total" style="font-size:14px;font-weight:700;color:#0f172a;"></div>
           </div>
         </div>
-        <div class="donut-legend" id="donut-legend"></div>
+        <div id="donut-legend" style="width:100%"></div>
       </div>
     </div>
   </div>
 
-  <!-- BARS -->
-  <div class="card" style="margin-bottom:20px;">
-    <div class="section-title">ภาพรวมผลงานสะสมทุกกิจกรรม</div>
-    <div class="bar-list" id="bar-list"></div>
+  <!-- Horizontal bars overview -->
+  <div class="card" style="margin-bottom:14px;">
+    <div class="sec">ภาพรวมผลงานสะสมทุกกิจกรรม</div>
+    <div id="bar-list"></div>
   </div>
 
-  <!-- TABLE -->
+  <!-- Table -->
   <div class="card">
-    <div class="section-title" style="margin-bottom:0">รายละเอียดกิจกรรมทั้งหมด <span id="row-count" style="font-weight:400;color:#94a3b8;"></span></div>
-    <div class="table-wrap" style="margin-top:14px;">
+    <div class="sec" style="margin-bottom:0">รายละเอียดกิจกรรม <span id="row-count" style="font-weight:400;color:#94a3b8;"></span></div>
+    <div class="tbl-wrap" style="margin-top:12px;">
       <table>
-        <thead>
-          <tr>
-            <th onclick="sortTable('id')">#</th>
-            <th onclick="sortTable('shortName')">กิจกรรม</th>
-            <th onclick="sortTable('unit')">หน่วย</th>
-            <th onclick="sortTable('monthly')" class="num">เดือนนี้</th>
-            <th onclick="sortTable('cumulative')" class="num">สะสม</th>
-            <th>สถานะ</th>
-          </tr>
-        </thead>
+        <thead><tr>
+          <th onclick="srt('id')">#</th>
+          <th onclick="srt('shortName')">กิจกรรม</th>
+          <th onclick="srt('unit')">หน่วย</th>
+          <th onclick="srt('monthly')" class="nr">เดือนนี้</th>
+          <th onclick="srt('cumulative')" class="nr">สะสม</th>
+          <th>สถานะ</th>
+        </tr></thead>
         <tbody id="tbl-body"></tbody>
-        <tfoot>
-          <tr>
-            <td colspan="3">รวมทั้งหมด</td>
-            <td class="num" id="foot-monthly"></td>
-            <td class="num" id="foot-cumul"></td>
-            <td></td>
-          </tr>
-        </tfoot>
+        <tfoot><tr>
+          <td colspan="3">รวมทั้งหมด</td>
+          <td class="nr" id="ft-m"></td>
+          <td class="nr" id="ft-c"></td>
+          <td></td>
+        </tr></tfoot>
       </table>
     </div>
   </div>
 
-  <div class="footer">โครงการส่งเสริมกีฬาเพื่อพัฒนาชาติไทย ในพระบรมราชูปถัมภ์ • จังหวัดหนองบัวลำภู</div>
+  <div class="ft">โครงการส่งเสริมกีฬาเพื่อพัฒนาชาติไทย ในพระบรมราชูปถัมภ์ • จังหวัดหนองบัวลำภู</div>
 </div>
 </div>
 
-<!-- ════════════════════════════════ PAGE: DATA ENTRY ════════════════════════════════ -->
-<div class="page" id="page-entry">
-<div class="main-entry">
-
-  <!-- PERIOD SELECTOR (entry has its own for clarity) -->
+<!-- ═══════════════ DATA ENTRY ═══════════════ -->
+<div class="pg" id="pg-entry">
+<div class="wrap-sm">
   <div class="period-card">
-    <label>📅 เลือกรอบรายงาน</label>
-    <select id="e-sel-month" onchange="syncPeriodFromEntry()">
-      <option value="0">มกราคม</option><option value="1">กุมภาพันธ์</option>
-      <option value="2">มีนาคม</option><option value="3">เมษายน</option>
-      <option value="4">พฤษภาคม</option><option value="5">มิถุนายน</option>
-      <option value="6">กรกฎาคม</option><option value="7">สิงหาคม</option>
-      <option value="8">กันยายน</option><option value="9">ตุลาคม</option>
-      <option value="10">พฤศจิกายน</option><option value="11">ธันวาคม</option>
-    </select>
-    <select id="e-sel-year" onchange="syncPeriodFromEntry()">
-      <option>2567</option><option>2568</option><option selected>2569</option><option>2570</option>
-    </select>
-    <div class="period-display" id="entry-period-display"></div>
+    <label>📅 เลือกรอบรายงาน (ปีงบประมาณ)</label>
+    <div class="fp" style="border-color:#059669;">
+      <div class="fp-lbl" style="background:#059669;">
+        <svg viewBox="0 0 24 24"><path d="M19 4h-1V2h-2v2H8V2H6v2H5C3.9 4 3 4.9 3 6v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11z"/></svg>
+        ปีงบประมาณ
+      </div>
+      <select id="e-sel-month" onchange="syncFromEntry()" style="font-family:'Sarabun',sans-serif;font-size:12px;font-weight:700;color:#065f46;background:#fff;border:none;outline:none;cursor:pointer;padding:0 8px;height:36px;">
+        <option value="9">ตุลาคม</option><option value="10">พฤศจิกายน</option>
+        <option value="11">ธันวาคม</option><option value="0">มกราคม</option>
+        <option value="1">กุมภาพันธ์</option><option value="2">มีนาคม</option>
+        <option value="3">เมษายน</option><option value="4">พฤษภาคม</option>
+        <option value="5">มิถุนายน</option><option value="6">กรกฎาคม</option>
+        <option value="7">สิงหาคม</option><option value="8">กันยายน</option>
+      </select>
+      <div class="fp-div" style="background:#a7f3d0;"></div>
+      <select id="e-sel-year" onchange="syncFromEntry()" style="font-family:'Sarabun',sans-serif;font-size:12px;font-weight:700;color:#065f46;background:#fff;border:none;outline:none;cursor:pointer;padding:0 8px;height:36px;">
+        <option>2566</option><option>2567</option><option>2568</option><option selected>2569</option><option>2570</option>
+      </select>
+    </div>
+    <div class="pdis" id="entry-pdis"></div>
   </div>
 
-  <!-- PROGRESS -->
-  <div class="progress-bar" id="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+  <div class="pbar" id="pbar"><div class="pfill" id="pfill"></div></div>
 
-  <!-- FORM TABLE -->
-  <div class="form-card">
-    <div class="form-card-header">
+  <div class="fcard">
+    <div class="fcard-hdr">
       <h2>ข้อมูลกิจกรรมทั้งหมด</h2>
-      <span class="count-badge" id="filled-count">กรอกแล้ว 0 / 15 รายการ</span>
+      <span class="cbdg" id="filled-count">กรอกแล้ว 0 / 15 รายการ</span>
     </div>
-    <div class="table-wrap">
-      <table>
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>กิจกรรม / หน่วยนับ</th>
-            <th style="text-align:right;color:#1d4ed8;">ผลงานประจำเดือน</th>
-            <th style="text-align:right;color:#5b21b6;">ผลงานสะสม</th>
-          </tr>
-        </thead>
+    <div class="tbl-wrap">
+      <table style="min-width:380px;">
+        <thead><tr>
+          <th>#</th>
+          <th>กิจกรรม / หน่วยนับ</th>
+          <th style="text-align:right;color:#1d4ed8;">เดือนนี้</th>
+          <th style="text-align:right;color:#5b21b6;">สะสม</th>
+        </tr></thead>
         <tbody id="form-body"></tbody>
-        <tfoot>
-          <tr>
-            <td colspan="2" style="font-size:12px;font-weight:600;color:var(--text-secondary);padding:10px 12px;">รวมทั้งหมด</td>
-            <td style="font-size:14px;font-weight:700;text-align:right;padding:10px 12px;" id="efoot-monthly">0</td>
-            <td style="font-size:14px;font-weight:700;text-align:right;padding:10px 12px;" id="efoot-cumul">0</td>
-          </tr>
-        </tfoot>
+        <tfoot><tr>
+          <td colspan="2" style="font-size:11px;font-weight:600;color:#64748b;padding:9px 10px;">รวมทั้งหมด</td>
+          <td style="font-size:13px;font-weight:700;text-align:right;padding:9px 10px;" id="ef-m">0</td>
+          <td style="font-size:13px;font-weight:700;text-align:right;padding:9px 10px;" id="ef-c">0</td>
+        </tr></tfoot>
       </table>
     </div>
   </div>
 
-  <!-- ACTIONS -->
-  <div class="action-row">
-    <button class="btn btn-primary" id="btn-submit" onclick="submitData()">
-      <div class="spinner" id="spinner"></div>
-      <span id="btn-label">📤 บันทึกลง Google Sheets</span>
+  <div class="act-row">
+    <button class="btn btn-p" id="btn-sub" onclick="submitData()">
+      <div class="spin" id="spin"></div>
+      <span id="btn-lbl">📤 บันทึกลง Google Sheets</span>
     </button>
-    <button class="btn btn-secondary" onclick="resetForm()">🔄 ล้างข้อมูล</button>
-    <button class="btn btn-danger" onclick="fillDemo()">🧪 ใส่ข้อมูลตัวอย่าง</button>
+    <button class="btn btn-s" onclick="resetForm()">🔄 ล้างข้อมูล</button>
+    <button class="btn btn-d" onclick="fillDemo()">🧪 ตัวอย่าง</button>
   </div>
-
 </div>
 </div>
 
 <script>
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxoucwYX2kFyC7lHQBZ8WhNi0GroJ_o84L5bG2GyDAuqAtqTda6GKVgLgNAbvSHUxSc/exec';
-
+const URL_GAS = 'https://script.google.com/macros/s/AKfycbxoucwYX2kFyC7lHQBZ8WhNi0GroJ_o84L5bG2GyDAuqAtqTda6GKVgLgNAbvSHUxSc/exec';
 const MONTHS = ['มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม'];
-const PALETTE = ['#2563eb','#4f46e5','#7c3aed','#0891b2','#059669'];
+const PAL = ['#2563eb','#4f46e5','#7c3aed','#0891b2','#059669'];
 const fmt = n => Number(n).toLocaleString('th-TH');
-
-const SHORTNAMES = {
-  1:'ประชุมคณะกรรมการ',2:'จัดทำโครงการ',3:'แต่งตั้งคณะทำงาน',
-  4:'พัฒนาสถานที่กีฬา',5:'จัดตั้งชมรมกีฬา',6:'จิตอาสาด้านกีฬา',
-  7:'ทะเบียนอาสาสมัคร',8:'ส่งเสริมจิตอาสา',9:'อบรม อสก.',
-  10:'อสก. ส่งเสริมกีฬา',11:'จัดแข่งขันกีฬา',12:'สนับสนุนร.ร.กีฬา',
-  13:'พัฒนาโครงสร้างพื้นฐาน',14:'นำเข้าข้อมูล TSA',15:'กิจกรรมอื่นๆ',
-};
-
-const ACTIVITIES = [
-  {id:1,  name:'จัดประชุมคณะกรรมการกีฬาประจำจังหวัดตามโครงการฯ', unit:'ครั้ง/คน'},
-  {id:2,  name:'จัดทำโครงการส่งเสริมกีฬาของจังหวัดโดยงบประมาณจากจังหวัด กลุ่มจังหวัด ฯลฯ', unit:'โครงการ'},
-  {id:3,  name:'แต่งตั้งคณะทำงานเพื่อสนับสนุนการดำเนินงานของโครงการฯ', unit:'ชุด/คน'},
-  {id:4,  name:'จัดเตรียมและพัฒนาสถานที่ออกกำลังกายและเล่นกีฬาของนักเรียนในโรงเรียน', unit:'แห่ง'},
-  {id:5,  name:'จัดตั้งชมรมกีฬาในสถานศึกษา ระดับตำบลและอำเภอ', unit:'ชมรม'},
-  {id:6,  name:'จัดตั้งจิตอาสาด้านกีฬาเพื่อส่งเสริมและสนับสนุนกิจกรรมกีฬาในระดับตำบลและอำเภอ', unit:'คน'},
-  {id:7,  name:'จัดทำทะเบียนอาสาสมัครด้านกีฬาและการออกกำลังภายในจังหวัด', unit:'ครั้ง/คน'},
-  {id:8,  name:'ส่งเสริมให้จิตอาสาด้านกีฬาช่วยสนับสนุนการดำเนินงานของโรงเรียนกีฬา ห้องเรียนกีฬา', unit:'ครั้ง/คน'},
-  {id:9,  name:'อาสาสมัครกีฬาและการออกกำลังกาย (อสก.) จัดอบรมและถ่ายทอดความรู้', unit:'ครั้ง/คน'},
-  {id:10, name:'อสก. ส่งเสริมให้เยาวชน ยุวชน และประชาชนออกกำลังกายและเล่นกีฬา', unit:'ครั้ง/คน'},
-  {id:11, name:'จัดแข่งขันกีฬาระดับยุวชน เยาวชนและประชาชน ในระดับสถานศึกษา ตำบล อำเภอ จังหวัด', unit:'ครั้ง/คน'},
-  {id:12, name:'สนับสนุนการดำเนินงานของโรงเรียนกีฬา ห้องเรียนกีฬาในสังกัดหน่วยงานต่างๆ', unit:'ครั้ง/คน'},
-  {id:13, name:'พัฒนาโครงสร้างพื้นฐานและสิ่งอำนวยความสะดวกในการเล่นกีฬาและการออกกำลังกาย', unit:'ครั้ง'},
-  {id:14, name:'นำเข้าข้อมูลโครงสร้างพื้นฐานกีฬาของจังหวัดผ่านโปรแกรม Thailand Sports Almanac', unit:'ครั้ง'},
-  {id:15, name:'กิจกรรมอื่นๆ (มวยบูชาประจำปี, Sport Day, เดิน-วิ่ง, กีฬาวันท้องถิ่น)', unit:'ครั้ง'},
+const SN = {1:'ประชุมคณะกรรมการ',2:'จัดทำโครงการ',3:'แต่งตั้งคณะทำงาน',4:'พัฒนาสถานที่กีฬา',5:'จัดตั้งชมรมกีฬา',6:'จิตอาสาด้านกีฬา',7:'ทะเบียนอาสาสมัคร',8:'ส่งเสริมจิตอาสา',9:'อบรม อสก.',10:'อสก. ส่งเสริมกีฬา',11:'จัดแข่งขันกีฬา',12:'สนับสนุนร.ร.กีฬา',13:'พัฒนาโครงสร้างพื้นฐาน',14:'นำเข้าข้อมูล TSA',15:'กิจกรรมอื่นๆ'};
+const ACTS = [
+  {id:1,name:'จัดประชุมคณะกรรมการกีฬาประจำจังหวัดตามโครงการฯ',unit:'ครั้ง/คน'},
+  {id:2,name:'จัดทำโครงการส่งเสริมกีฬาของจังหวัดโดยงบประมาณจากจังหวัด กลุ่มจังหวัด ฯลฯ',unit:'โครงการ'},
+  {id:3,name:'แต่งตั้งคณะทำงานเพื่อสนับสนุนการดำเนินงานของโครงการฯ',unit:'ชุด/คน'},
+  {id:4,name:'จัดเตรียมและพัฒนาสถานที่ออกกำลังกายและเล่นกีฬาของนักเรียนในโรงเรียน',unit:'แห่ง'},
+  {id:5,name:'จัดตั้งชมรมกีฬาในสถานศึกษา ระดับตำบลและอำเภอ',unit:'ชมรม'},
+  {id:6,name:'จัดตั้งจิตอาสาด้านกีฬาเพื่อส่งเสริมและสนับสนุนกิจกรรมกีฬาในระดับตำบลและอำเภอ',unit:'คน'},
+  {id:7,name:'จัดทำทะเบียนอาสาสมัครด้านกีฬาและการออกกำลังภายในจังหวัด',unit:'ครั้ง/คน'},
+  {id:8,name:'ส่งเสริมให้จิตอาสาด้านกีฬาช่วยสนับสนุนการดำเนินงานของโรงเรียนกีฬา ห้องเรียนกีฬา',unit:'ครั้ง/คน'},
+  {id:9,name:'อาสาสมัครกีฬาและการออกกำลังกาย (อสก.) จัดอบรมและถ่ายทอดความรู้',unit:'ครั้ง/คน'},
+  {id:10,name:'อสก. ส่งเสริมให้เยาวชน ยุวชน และประชาชนออกกำลังกายและเล่นกีฬา',unit:'ครั้ง/คน'},
+  {id:11,name:'จัดแข่งขันกีฬาระดับยุวชน เยาวชนและประชาชน ในระดับสถานศึกษา ตำบล อำเภอ จังหวัด',unit:'ครั้ง/คน'},
+  {id:12,name:'สนับสนุนการดำเนินงานของโรงเรียนกีฬา ห้องเรียนกีฬาในสังกัดหน่วยงานต่างๆ',unit:'ครั้ง/คน'},
+  {id:13,name:'พัฒนาโครงสร้างพื้นฐานและสิ่งอำนวยความสะดวกในการเล่นกีฬาและการออกกำลังกาย',unit:'ครั้ง'},
+  {id:14,name:'นำเข้าข้อมูลโครงสร้างพื้นฐานกีฬาของจังหวัดผ่านโปรแกรม Thailand Sports Almanac',unit:'ครั้ง'},
+  {id:15,name:'กิจกรรมอื่นๆ (มวยบูชาประจำปี, Sport Day, เดิน-วิ่ง, กีฬาวันท้องถิ่น)',unit:'ครั้ง'},
 ];
 
-// ════ TAB ════
-function switchTab(tab) {
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-  document.getElementById('page-' + tab).classList.add('active');
-  document.getElementById('tab-' + tab).classList.add('active');
-  if (tab === 'dashboard') loadData();
+// ═══ TAB ═══
+function switchTab(t){
+  document.querySelectorAll('.pg').forEach(p=>p.classList.remove('on'));
+  document.querySelectorAll('.tab').forEach(b=>b.classList.remove('on'));
+  document.getElementById('pg-'+t).classList.add('on');
+  document.getElementById('tab-'+t).classList.add('on');
+  if(t==='dash') loadData();
 }
 
-// ════ PERIOD ════
-function getPeriod() {
-  const m = MONTHS[+document.getElementById('sel-month').value];
-  const y = document.getElementById('sel-year').value;
-  return `${m} พ.ศ. ${y}`;
+// ═══ PERIOD ═══
+function getPeriod(){
+  return `${MONTHS[+document.getElementById('sel-month').value]} พ.ศ. ${document.getElementById('sel-year').value}`;
 }
-
-function onPeriodChange() {
-  const m = document.getElementById('sel-month').value;
-  const y = document.getElementById('sel-year').value;
+function getEntryPeriod(){
+  return `${MONTHS[+document.getElementById('e-sel-month').value]} พ.ศ. ${document.getElementById('e-sel-year').value}`;
+}
+function onPeriodChange(){
   document.getElementById('period-label').textContent = getPeriod();
-  // sync entry dropdowns
-  document.getElementById('e-sel-month').value = m;
-  document.getElementById('e-sel-year').value  = y;
-  updateEntryPeriodDisplay();
+  syncToEntry();
   loadData();
 }
-
-function syncPeriodFromEntry() {
-  const m = document.getElementById('e-sel-month').value;
-  const y = document.getElementById('e-sel-year').value;
-  document.getElementById('sel-month').value = m;
-  document.getElementById('sel-year').value  = y;
+function syncToEntry(){
+  setVal('e-sel-month', document.getElementById('sel-month').value);
+  setVal('e-sel-year',  document.getElementById('sel-year').value);
+  document.getElementById('entry-pdis').textContent = getEntryPeriod();
+}
+function syncFromEntry(){
+  setVal('sel-month', document.getElementById('e-sel-month').value);
+  setVal('sel-year',  document.getElementById('e-sel-year').value);
   document.getElementById('period-label').textContent = getPeriod();
-  updateEntryPeriodDisplay();
+  document.getElementById('entry-pdis').textContent   = getEntryPeriod();
+}
+function setVal(id,v){
+  const s=document.getElementById(id);
+  for(let i=0;i<s.options.length;i++) if(String(s.options[i].value)===String(v)){s.selectedIndex=i;return;}
 }
 
-function updateEntryPeriodDisplay() {
-  const m = MONTHS[+document.getElementById('e-sel-month').value];
-  const y = document.getElementById('e-sel-year').value;
-  document.getElementById('entry-period-display').textContent = `${m} พ.ศ. ${y}`;
+// ═══ DASHBOARD FETCH ═══
+let curData=[],sk='id',sd='asc',chC=null,chD=null;
+
+function setLoad(on){ document.getElementById('lov').style.display=on?'flex':'none'; }
+function showErr(m){ const e=document.getElementById('errbanner'); e.textContent=m; e.style.display=m?'block':'none'; }
+
+async function loadData(){
+  setLoad(true); showErr('');
+  try{
+    const r=await fetch(`${URL_GAS}?period=${encodeURIComponent(getPeriod())}`);
+    const j=await r.json();
+    if(j.success&&j.activities&&j.activities.length){
+      curData=j.activities.map(a=>({...a,id:+a.id,monthly:+a.monthly||0,cumulative:+a.cumulative||0,shortName:SN[+a.id]||a.name}));
+      showErr('');
+    } else { curData=[]; showErr(`ไม่พบข้อมูลเดือน ${getPeriod()} ใน Google Sheets`); }
+  } catch(e){ curData=[]; showErr('เชื่อมต่อ Google Sheets ไม่ได้ — '+e.message); }
+  renderAll(); setLoad(false);
 }
 
-function getEntryPeriod() {
-  const m = MONTHS[+document.getElementById('e-sel-month').value];
-  const y = document.getElementById('e-sel-year').value;
-  return `${m} พ.ศ. ${y}`;
+function renderAll(){ renderKPI(); renderCompare(); renderDonut(); renderBars(); renderTable(); }
+
+function renderKPI(){
+  const d=curData;
+  document.getElementById('kpi-total').textContent   = d.length||'-';
+  document.getElementById('kpi-active').textContent  = d.length?d.filter(a=>a.monthly>0).length:'-';
+  document.getElementById('kpi-monthly').textContent = d.length?fmt(d.reduce((s,a)=>s+a.monthly,0)):'-';
+  document.getElementById('kpi-cumul').textContent   = d.length?fmt(d.reduce((s,a)=>s+a.cumulative,0)):'-';
 }
 
-// ════ DASHBOARD: FETCH ════
-let currentData = [], sortKey = 'id', sortDir = 'asc';
-let chartCompare = null, chartDonut = null;
-
-function setLoading(on) {
-  document.getElementById('loading-overlay').style.display = on ? 'flex' : 'none';
-}
-function showError(msg) {
-  const el = document.getElementById('error-banner');
-  el.textContent = msg; el.style.display = msg ? 'block' : 'none';
-}
-
-async function loadData() {
-  setLoading(true); showError('');
-  const url = `${APPS_SCRIPT_URL}?period=${encodeURIComponent(getPeriod())}`;
-  try {
-    const res  = await fetch(url);
-    const json = await res.json();
-    if (json.success && json.activities && json.activities.length > 0) {
-      currentData = json.activities.map(a => ({
-        ...a, id:Number(a.id),
-        monthly:Number(a.monthly)||0, cumulative:Number(a.cumulative)||0,
-        shortName: SHORTNAMES[Number(a.id)] || a.name,
-      }));
-      showError('');
-    } else {
-      currentData = [];
-      showError(`ไม่พบข้อมูลเดือน ${getPeriod()} ใน Google Sheets`);
-    }
-  } catch(err) {
-    currentData = [];
-    showError('ไม่สามารถเชื่อมต่อ Google Sheets ได้ — ' + err.message);
-  }
-  renderAll(); setLoading(false);
-}
-
-function renderAll() { renderKPI(); renderCompareChart(); renderDonut(); renderBars(); renderTable(); }
-
-function renderKPI() {
-  const d = currentData;
-  document.getElementById('kpi-total').textContent   = d.length || '-';
-  document.getElementById('kpi-active').textContent  = d.length ? d.filter(a=>a.monthly>0).length : '-';
-  document.getElementById('kpi-monthly').textContent = d.length ? fmt(d.reduce((s,a)=>s+a.monthly,0)) : '-';
-  document.getElementById('kpi-cumul').textContent   = d.length ? fmt(d.reduce((s,a)=>s+a.cumulative,0)) : '-';
-}
-
-function renderCompareChart() {
-  const top8 = [...currentData].sort((a,b)=>b.cumulative-a.cumulative).slice(0,8);
-  if (chartCompare) chartCompare.destroy();
-  chartCompare = new Chart(document.getElementById('chartCompare'), {
+function renderCompare(){
+  // Horizontal bar chart — all activities sorted by cumulative desc
+  const data = [...curData].sort((a,b)=>b.cumulative-a.cumulative);
+  const h = Math.max(data.length*50+60, 200);
+  document.getElementById('compare-wrap').style.height = h+'px';
+  if(chC) chC.destroy();
+  chC = new Chart(document.getElementById('chartCompare'),{
     type:'bar',
-    data:{ labels:top8.map(a=>a.shortName), datasets:[
-      {label:'เดือนนี้', data:top8.map(a=>a.monthly),    backgroundColor:'#93c5fd', borderRadius:4},
-      {label:'สะสม',    data:top8.map(a=>a.cumulative), backgroundColor:'#2563eb', borderRadius:4},
-    ]},
-    options:{ responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}},
-      scales:{ x:{ticks:{font:{family:'Sarabun',size:10},maxRotation:40,autoSkip:false},grid:{display:false}},
-               y:{ticks:{font:{family:'Sarabun',size:10}},grid:{color:'rgba(0,0,0,.05)'}} } }
+    data:{
+      labels: data.map(a=>a.shortName),
+      datasets:[
+        {label:'เดือนนี้', data:data.map(a=>a.monthly),    backgroundColor:'#93c5fd',borderRadius:3,barThickness:10},
+        {label:'สะสม',    data:data.map(a=>a.cumulative), backgroundColor:'#2563eb',borderRadius:3,barThickness:10},
+      ]
+    },
+    options:{
+      indexAxis:'y',
+      responsive:true, maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>` ${ctx.dataset.label}: ${fmt(ctx.raw)}`}}},
+      scales:{
+        x:{ticks:{font:{family:'Sarabun',size:10}},grid:{color:'rgba(0,0,0,.04)'}},
+        y:{ticks:{font:{family:'Sarabun',size:10}},grid:{display:false}}
+      }
+    }
   });
 }
 
-function renderDonut() {
-  const top5 = [...currentData].sort((a,b)=>b.cumulative-a.cumulative).slice(0,5);
-  const total = top5.reduce((s,a)=>s+a.cumulative,0);
-  document.getElementById('donut-total').textContent = fmt(total);
-  if (chartDonut) chartDonut.destroy();
-  chartDonut = new Chart(document.getElementById('chartDonut'), {
+function renderDonut(){
+  const top5=[...curData].sort((a,b)=>b.cumulative-a.cumulative).slice(0,5);
+  const tot=top5.reduce((s,a)=>s+a.cumulative,0);
+  document.getElementById('donut-total').textContent=fmt(tot);
+  if(chD) chD.destroy();
+  chD=new Chart(document.getElementById('chartDonut'),{
     type:'doughnut',
-    data:{ labels:top5.map(a=>a.shortName), datasets:[{data:top5.map(a=>a.cumulative), backgroundColor:PALETTE, borderWidth:0, hoverOffset:6}] },
-    options:{ responsive:true, maintainAspectRatio:false, cutout:'72%',
-      plugins:{legend:{display:false}, tooltip:{callbacks:{label:ctx=>` ${ctx.label}: ${fmt(ctx.raw)}`}}} }
+    data:{labels:top5.map(a=>a.shortName),datasets:[{data:top5.map(a=>a.cumulative),backgroundColor:PAL,borderWidth:0,hoverOffset:5}]},
+    options:{responsive:true,maintainAspectRatio:false,cutout:'72%',
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>` ${ctx.label}: ${fmt(ctx.raw)}`}}}}
   });
-  document.getElementById('donut-legend').innerHTML = top5.map((a,i)=>{
-    const pct = total>0 ? ((a.cumulative/total)*100).toFixed(1) : '0.0';
-    return `<div class="donut-legend-item"><span class="dl-dot" style="background:${PALETTE[i]}"></span><span class="dl-name">${a.shortName}</span><span class="dl-pct">${pct}%</span></div>`;
+  document.getElementById('donut-legend').innerHTML=top5.map((a,i)=>{
+    const p=tot>0?((a.cumulative/tot)*100).toFixed(1):'0.0';
+    return `<div class="dl-item"><span class="dl-dot" style="background:${PAL[i]}"></span><span class="dl-name">${a.shortName}</span><span class="dl-pct">${p}%</span></div>`;
   }).join('');
 }
 
-function renderBars() {
-  const maxC = Math.max(...currentData.map(a=>a.cumulative), 1);
-  document.getElementById('bar-list').innerHTML = currentData.length
-    ? currentData.map(a=>`<div class="bar-row"><div class="bar-name" title="${a.name}">${a.shortName}</div><div class="bar-track"><div class="bar-fill" style="width:${(a.cumulative/maxC*100).toFixed(1)}%"></div></div><div class="bar-val">${fmt(a.cumulative)}</div></div>`).join('')
-    : '<p style="color:#94a3b8;font-size:13px;padding:8px 0;">ไม่มีข้อมูล</p>';
+function renderBars(){
+  const mx=Math.max(...curData.map(a=>a.cumulative),1);
+  document.getElementById('bar-list').innerHTML=curData.length
+    ? curData.map(a=>`<div class="brow"><div class="bname" title="${a.name}">${a.shortName}</div><div class="btrack"><div class="bfill" style="width:${(a.cumulative/mx*100).toFixed(1)}%"></div></div><div class="bval">${fmt(a.cumulative)}</div></div>`).join('')
+    : '<p style="color:#94a3b8;font-size:12px;padding:6px 0;">ไม่มีข้อมูล</p>';
 }
 
-function renderTable() {
-  const data = [...currentData].sort((a,b)=>{
-    const va=a[sortKey],vb=b[sortKey];
-    const cmp=typeof va==='number'?va-vb:String(va).localeCompare(String(vb),'th');
-    return sortDir==='asc'?cmp:-cmp;
+function renderTable(){
+  const data=[...curData].sort((a,b)=>{
+    const va=a[sk],vb=b[sk];
+    const c=typeof va==='number'?va-vb:String(va).localeCompare(String(vb),'th');
+    return sd==='asc'?c:-c;
   });
-  document.getElementById('tbl-body').innerHTML = data.length
+  document.getElementById('tbl-body').innerHTML=data.length
     ? data.map(a=>`<tr>
-        <td style="color:#94a3b8;font-size:12px">${a.id}</td>
-        <td style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${a.name}">${a.shortName}</td>
-        <td style="color:#64748b;font-size:12px">${a.unit}</td>
-        <td class="num">${fmt(a.monthly)}</td>
-        <td class="num" style="color:#4f46e5;font-weight:700">${fmt(a.cumulative)}</td>
-        <td>${a.monthly>0?`<span class="badge badge-active"><span class="badge-dot"></span>ดำเนินการ</span>`:`<span class="badge badge-idle"><span class="badge-dot"></span>ไม่มีข้อมูล</span>`}</td>
+        <td style="color:#94a3b8;font-size:11px">${a.id}</td>
+        <td style="max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${a.name}">${a.shortName}</td>
+        <td style="color:#64748b;font-size:11px">${a.unit}</td>
+        <td class="nr">${fmt(a.monthly)}</td>
+        <td class="nr" style="color:#4f46e5;font-weight:700">${fmt(a.cumulative)}</td>
+        <td>${a.monthly>0?`<span class="bdg bdg-on"><span class="bdg-d"></span>ดำเนินการ</span>`:`<span class="bdg bdg-off"><span class="bdg-d"></span>ไม่มีข้อมูล</span>`}</td>
       </tr>`).join('')
-    : `<tr><td colspan="6" style="text-align:center;color:#94a3b8;padding:24px;font-size:13px;">ไม่พบข้อมูลในเดือนนี้</td></tr>`;
-  document.getElementById('row-count').textContent = `(${currentData.length} รายการ)`;
-  document.getElementById('foot-monthly').textContent = fmt(currentData.reduce((s,a)=>s+a.monthly,0));
-  document.getElementById('foot-cumul').textContent   = fmt(currentData.reduce((s,a)=>s+a.cumulative,0));
-  document.querySelectorAll('thead th').forEach(th=>th.classList.remove('sort-asc','sort-desc'));
+    : `<tr><td colspan="6" style="text-align:center;color:#94a3b8;padding:20px;font-size:12px;">ไม่พบข้อมูลในเดือนนี้</td></tr>`;
+  document.getElementById('row-count').textContent=`(${curData.length} รายการ)`;
+  document.getElementById('ft-m').textContent=fmt(curData.reduce((s,a)=>s+a.monthly,0));
+  document.getElementById('ft-c').textContent=fmt(curData.reduce((s,a)=>s+a.cumulative,0));
+  document.querySelectorAll('thead th').forEach(t=>t.classList.remove('sa','sd'));
   const keys=['id','shortName','unit','monthly','cumulative',''];
-  const idx=keys.indexOf(sortKey);
-  if(idx>=0){const ths=document.querySelectorAll('thead th');if(ths[idx])ths[idx].classList.add(sortDir==='asc'?'sort-asc':'sort-desc');}
+  const i=keys.indexOf(sk);
+  if(i>=0){const ths=document.querySelectorAll('#pg-dash thead th');if(ths[i])ths[i].classList.add(sd==='asc'?'sa':'sd');}
 }
+function srt(k){ sd=sk===k?(sd==='asc'?'desc':'asc'):'asc'; sk=k; renderTable(); }
 
-function sortTable(key) {
-  sortDir = sortKey===key ? (sortDir==='asc'?'desc':'asc') : 'asc';
-  sortKey = key; renderTable();
-}
-
-// ════ ENTRY FORM ════
-function buildTable() {
-  document.getElementById('form-body').innerHTML = ACTIVITIES.map(a=>`
+// ═══ ENTRY FORM ═══
+function buildForm(){
+  document.getElementById('form-body').innerHTML=ACTS.map(a=>`
     <tr>
-      <td class="num-col">${a.id}</td>
-      <td class="name-col"><div class="act-name">${a.name}</div><div class="act-unit">${a.unit}</div></td>
-      <td class="input-col"><input type="number" min="0" class="num-input monthly-input" id="m_${a.id}" placeholder="0" oninput="onInput(this)" /></td>
-      <td class="input-col"><input type="number" min="0" class="num-input cumul-input"   id="c_${a.id}" placeholder="0" oninput="onInputC(this)" /></td>
+      <td class="nc">${a.id}</td>
+      <td class="nmc"><div class="aname">${a.name}</div><div class="aunit">${a.unit}</div></td>
+      <td class="ic"><input type="number" min="0" class="ni" id="m_${a.id}" placeholder="0" oninput="onI(this,'m')"/></td>
+      <td class="ic"><input type="number" min="0" class="ni cv" id="c_${a.id}" placeholder="0" oninput="onI(this,'c')"/></td>
     </tr>`).join('');
 }
-
-function onInput(el)  { el.classList.toggle('has-value', el.value!==''&&+el.value>0); updateTotals(); }
-function onInputC(el) { el.classList.toggle('has-value', el.value!==''&&+el.value>0); updateTotals(); }
-
-function updateTotals() {
-  let sumM=0,sumC=0,filled=0;
-  ACTIVITIES.forEach(a=>{
-    const m=+document.getElementById(`m_${a.id}`).value||0;
-    const c=+document.getElementById(`c_${a.id}`).value||0;
-    sumM+=m; sumC+=c; if(m>0||c>0) filled++;
-  });
-  document.getElementById('efoot-monthly').textContent = sumM.toLocaleString('th-TH');
-  document.getElementById('efoot-cumul').textContent   = sumC.toLocaleString('th-TH');
-  document.getElementById('filled-count').textContent  = `กรอกแล้ว ${filled} / ${ACTIVITIES.length} รายการ`;
+function onI(el,t){el.classList.toggle('hv',el.value!==''&&+el.value>0);calcTot();}
+function calcTot(){
+  let sm=0,sc=0,f=0;
+  ACTS.forEach(a=>{const m=+document.getElementById(`m_${a.id}`).value||0,c=+document.getElementById(`c_${a.id}`).value||0;sm+=m;sc+=c;if(m>0||c>0)f++;});
+  document.getElementById('ef-m').textContent=sm.toLocaleString('th-TH');
+  document.getElementById('ef-c').textContent=sc.toLocaleString('th-TH');
+  document.getElementById('filled-count').textContent=`กรอกแล้ว ${f} / ${ACTS.length} รายการ`;
 }
-
-function resetForm() {
-  ACTIVITIES.forEach(a=>{
-    const mi=document.getElementById(`m_${a.id}`), ci=document.getElementById(`c_${a.id}`);
-    mi.value=''; mi.classList.remove('has-value');
-    ci.value=''; ci.classList.remove('has-value');
-  });
-  updateTotals(); showToast('ล้างข้อมูลเรียบร้อยแล้ว','info');
+function resetForm(){
+  ACTS.forEach(a=>{const m=document.getElementById(`m_${a.id}`),c=document.getElementById(`c_${a.id}`);m.value='';m.classList.remove('hv');c.value='';c.classList.remove('hv');});
+  calcTot(); toast('ล้างข้อมูลเรียบร้อยแล้ว','');
 }
-
-const DEMO=[1,3,16,1,1,4,5,1,1,550,5361,20,1,2,8];
-const DEMO_C=[6,9,20,374,206,272,913,7,68,1039,12310,48,46,24,3900];
-function fillDemo() {
-  ACTIVITIES.forEach((a,i)=>{
-    const mi=document.getElementById(`m_${a.id}`), ci=document.getElementById(`c_${a.id}`);
-    mi.value=DEMO[i]; mi.classList.add('has-value');
-    ci.value=DEMO_C[i]; ci.classList.add('has-value');
-  });
-  updateTotals(); showToast('ใส่ข้อมูลตัวอย่างแล้ว','info');
+const DM=[1,3,16,1,1,4,5,1,1,550,5361,20,1,2,8];
+const DC=[6,9,20,374,206,272,913,7,68,1039,12310,48,46,24,3900];
+function fillDemo(){
+  ACTS.forEach((a,i)=>{const m=document.getElementById(`m_${a.id}`),c=document.getElementById(`c_${a.id}`);m.value=DM[i];m.classList.add('hv');c.value=DC[i];c.classList.add('hv');});
+  calcTot(); toast('ใส่ข้อมูลตัวอย่างแล้ว','');
 }
-
-async function submitData() {
-  const activities = ACTIVITIES.map(a=>({
-    id:a.id, name:a.name, unit:a.unit,
-    monthly:+document.getElementById(`m_${a.id}`).value||0,
-    cumulative:+document.getElementById(`c_${a.id}`).value||0,
-  }));
-  if (!activities.some(a=>a.monthly>0||a.cumulative>0)) {
-    showToast('กรุณากรอกข้อมูลอย่างน้อย 1 รายการ','error'); return;
-  }
-  const btn=document.getElementById('btn-submit');
-  btn.disabled=true;
-  document.getElementById('spinner').style.display='block';
-  document.getElementById('btn-label').textContent='กำลังบันทึก...';
-  showProgress(40);
-  try {
-    showProgress(70);
-    await fetch(APPS_SCRIPT_URL, {
-      method:'POST', mode:'no-cors',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({period:getEntryPeriod(), activities}),
-    });
-    showProgress(100);
-    showToast(`✅ บันทึกข้อมูลเดือน ${getEntryPeriod()} สำเร็จแล้ว`,'success');
-    setTimeout(hideProgress, 800);
-  } catch(err) {
-    showToast(`❌ เกิดข้อผิดพลาด: ${err.message}`,'error'); hideProgress();
-  } finally {
-    btn.disabled=false;
-    document.getElementById('spinner').style.display='none';
-    document.getElementById('btn-label').textContent='📤 บันทึกลง Google Sheets';
-  }
+async function submitData(){
+  const acts=ACTS.map(a=>({id:a.id,name:a.name,unit:a.unit,monthly:+document.getElementById(`m_${a.id}`).value||0,cumulative:+document.getElementById(`c_${a.id}`).value||0}));
+  if(!acts.some(a=>a.monthly>0||a.cumulative>0)){toast('กรุณากรอกข้อมูลอย่างน้อย 1 รายการ','er');return;}
+  const btn=document.getElementById('btn-sub');
+  btn.disabled=true;document.getElementById('spin').style.display='block';
+  document.getElementById('btn-lbl').textContent='กำลังบันทึก...';prog(40);
+  try{
+    prog(70);
+    await fetch(URL_GAS,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify({period:getEntryPeriod(),activities:acts})});
+    prog(100); toast(`✅ บันทึกข้อมูลเดือน ${getEntryPeriod()} สำเร็จ`,'ok'); setTimeout(progHide,800);
+  } catch(e){toast(`❌ เกิดข้อผิดพลาด: ${e.message}`,'er');progHide();}
+  finally{btn.disabled=false;document.getElementById('spin').style.display='none';document.getElementById('btn-lbl').textContent='📤 บันทึกลง Google Sheets';}
 }
+function prog(p){const b=document.getElementById('pbar');b.style.display='block';setTimeout(()=>document.getElementById('pfill').style.width=p+'%',30);}
+function progHide(){document.getElementById('pfill').style.width='0%';setTimeout(()=>document.getElementById('pbar').style.display='none',400);}
 
-function showProgress(pct) {
-  const bar=document.getElementById('progress-bar'); bar.style.display='block';
-  setTimeout(()=>document.getElementById('progress-fill').style.width=pct+'%',30);
-}
-function hideProgress() {
-  document.getElementById('progress-fill').style.width='0%';
-  setTimeout(()=>document.getElementById('progress-bar').style.display='none',400);
-}
-
-// ════ TOAST ════
-let toastTimer;
-function showToast(msg,type='info') {
+// ═══ TOAST ═══
+let tt;
+function toast(msg,type){
   const el=document.getElementById('toast');
-  const icons={success:'✅',error:'❌',info:'ℹ️'};
-  document.getElementById('toast-msg').textContent=msg;
-  document.getElementById('toast-icon').textContent=icons[type]||'';
-  el.className=`toast ${type} show`;
-  clearTimeout(toastTimer);
-  toastTimer=setTimeout(()=>el.classList.remove('show'),3500);
+  document.getElementById('tmsg').textContent=msg;
+  document.getElementById('tico').textContent='';
+  el.className='toast'+(type?' '+type:'');
+  void el.offsetWidth; el.classList.add('on');
+  clearTimeout(tt); tt=setTimeout(()=>el.classList.remove('on'),3500);
 }
 
-// ════ INIT ════
-const now = new Date();
-const thaiYear = now.getFullYear() + 543;
-document.getElementById('sel-month').value   = now.getMonth();
-document.getElementById('e-sel-month').value = now.getMonth();
-[document.getElementById('sel-year'), document.getElementById('e-sel-year')].forEach(sel=>{
-  for(let i=0;i<sel.options.length;i++) if(sel.options[i].value==thaiYear){sel.selectedIndex=i;break;}
-});
-
-document.getElementById('period-label').textContent = getPeriod();
-updateEntryPeriodDisplay();
-buildTable();
-loadData();
+// ═══ INIT: lock to latest month ═══
+(function init(){
+  const now=new Date();
+  const m=now.getMonth();
+  const y=now.getFullYear()+543;
+  // ปีงบประมาณ: ต.ค.–ธ.ค. = ปีถัดไป
+  const fy = m>=9 ? y+1 : y;
+  setVal('sel-month',m); setVal('sel-year',fy);
+  setVal('e-sel-month',m); setVal('e-sel-year',fy);
+  document.getElementById('period-label').textContent=getPeriod();
+  document.getElementById('entry-pdis').textContent=getEntryPeriod();
+  buildForm(); loadData();
+})();
 </script>
 </body>
 </html>

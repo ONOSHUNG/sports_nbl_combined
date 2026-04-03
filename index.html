@@ -348,6 +348,17 @@ td.ic{width:95px;vertical-align:middle}
     <button class="tab" onclick="switchTab('entry')" id="tab-entry">📝 กรอกข้อมูล <span id="lock-icon" style="font-size:11px;opacity:.6;">🔒</span></button>
   </div>
   <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:flex-end;">
+    <!-- View mode toggle -->
+    <div style="display:flex;border:1.5px solid #334155;border-radius:9px;overflow:hidden;flex-shrink:0;margin:6px 0;">
+      <button id="btn-monthly" onclick="setViewMode('monthly')"
+        style="font-family:'Sarabun',sans-serif;font-size:11px;font-weight:700;padding:0 11px;height:34px;border:none;cursor:pointer;transition:all .15s;background:#2563eb;color:#fff;">
+        รายเดือน
+      </button>
+      <button id="btn-yearly" onclick="setViewMode('yearly')"
+        style="font-family:'Sarabun',sans-serif;font-size:11px;font-weight:700;padding:0 11px;height:34px;border:none;cursor:pointer;transition:all .15s;background:#1e293b;color:#64748b;">
+        ทั้งปีงบประมาณ
+      </button>
+    </div>
     <!-- District filter -->
     <div class="fp" style="border-color:#7c3aed;">
       <div class="fp-lbl" style="background:#7c3aed;">
@@ -398,14 +409,14 @@ td.ic{width:95px;vertical-align:middle}
       <div class="kpi-sfx">กิจกรรม</div>
     </div>
     <div class="kpi kpi-green">
-      <div class="kpi-top"><span class="kpi-ico">⚡</span><span class="kpi-badge kpi-green">เดือนนี้</span></div>
-      <div class="kpi-lbl">ดำเนินการเดือนนี้</div>
+      <div class="kpi-top"><span class="kpi-ico">⚡</span><span class="kpi-badge kpi-green" id="kpi-active-badge">เดือนนี้</span></div>
+      <div class="kpi-lbl" id="kpi-active-lbl">ดำเนินการเดือนนี้</div>
       <div class="kpi-val" id="kpi-active">-</div>
       <div class="kpi-sfx">รายการ</div>
     </div>
     <div class="kpi kpi-indigo">
-      <div class="kpi-top"><span class="kpi-ico">📊</span><span class="kpi-badge kpi-indigo">ประจำเดือน</span></div>
-      <div class="kpi-lbl">ผลงานประจำเดือน</div>
+      <div class="kpi-top"><span class="kpi-ico">📊</span><span class="kpi-badge kpi-indigo" id="kpi-monthly-badge">ประจำเดือน</span></div>
+      <div class="kpi-lbl" id="kpi-monthly-lbl">ผลงานประจำเดือน</div>
       <div class="kpi-val" id="kpi-monthly">-</div>
       <div class="kpi-sfx">ครั้ง/คน</div>
     </div>
@@ -721,13 +732,45 @@ let curData=[],sk='id',sd='asc',chD=null;
 function setLoad(on){document.getElementById('lov').style.display=on?'flex':'none';}
 function showErr(m){const e=document.getElementById('errbanner');e.textContent=m;e.style.display=m?'block':'none';}
 
+// ── VIEW MODE ──
+let viewMode = 'monthly'; // 'monthly' | 'yearly'
+
+function setViewMode(mode){
+  viewMode = mode;
+  const isYearly = mode==='yearly';
+  // toggle button styles
+  document.getElementById('btn-monthly').style.background = isYearly ? '#1e293b' : '#2563eb';
+  document.getElementById('btn-monthly').style.color      = isYearly ? '#64748b' : '#fff';
+  document.getElementById('btn-yearly').style.background  = isYearly ? '#2563eb' : '#1e293b';
+  document.getElementById('btn-yearly').style.color       = isYearly ? '#fff' : '#64748b';
+  // ซ่อน/แสดง dropdown เดือน
+  document.getElementById('sel-month').style.display = isYearly ? 'none' : '';
+  // อัปเดต KPI labels
+  document.getElementById('kpi-active-badge').textContent = isYearly ? 'ทั้งปี' : 'เดือนนี้';
+  document.getElementById('kpi-active-lbl').textContent   = isYearly ? 'ดำเนินการทั้งปี' : 'ดำเนินการเดือนนี้';
+  document.getElementById('kpi-monthly-badge').textContent= isYearly ? 'รวมทั้งปี' : 'ประจำเดือน';
+  document.getElementById('kpi-monthly-lbl').textContent  = isYearly ? 'ผลงานรวมทั้งปี' : 'ผลงานประจำเดือน';
+  loadData();
+}
+
 function onDistrictChange(){ loadData(); }
 
 async function loadData(){
   setLoad(true); showErr('');
   const district = document.getElementById('sel-district')?.value||'';
-  let url = `${URL_GAS}?period=${encodeURIComponent(getPeriod())}`;
+  const year     = document.getElementById('sel-year').value;
+  const isYearly = viewMode==='yearly';
+
+  let url;
+  if(isYearly){
+    url = `${URL_GAS}?fiscalYear=${encodeURIComponent(year)}`;
+    document.getElementById('period-label').textContent = `ปีงบประมาณ ${year}`;
+  } else {
+    url = `${URL_GAS}?period=${encodeURIComponent(getPeriod())}`;
+    document.getElementById('period-label').textContent = getPeriod();
+  }
   if(district) url += `&district=${encodeURIComponent(district)}`;
+
   try{
     const r=await fetch(url);
     const j=await r.json();
@@ -737,12 +780,15 @@ async function loadData(){
         id: Number(a.id)||0,
         monthly: Number(a.monthly)||0,
         cumulative: Number(a.cumulative)||0,
-        // ถ้า Sheet ไม่ส่งชื่อมา ให้ดึงจาก ACTS
         name: a.name || ACTS.find(x=>x.id===Number(a.id))?.name || '',
         unit: a.unit || ACTS.find(x=>x.id===Number(a.id))?.unit || '',
       }));
       showErr('');
-    } else { curData=[]; showErr(`ไม่พบข้อมูลเดือน ${getPeriod()}${district?' — อ.'+district:''} ใน Google Sheets`); }
+    } else {
+      curData=[];
+      const label = isYearly ? `ปีงบประมาณ ${year}` : getPeriod();
+      showErr(`ไม่พบข้อมูล ${label}${district?' — อ.'+district:''} ใน Google Sheets`);
+    }
   } catch(e){ curData=[]; showErr('เชื่อมต่อ Google Sheets ไม่ได้ — '+e.message); }
   renderAll(); setLoad(false);
 }

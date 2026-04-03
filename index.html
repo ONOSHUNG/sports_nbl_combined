@@ -697,8 +697,8 @@ function _doSwitchTab(t){
 }
 
 // ── PERIOD ──
-function getPeriod(){ return `${MONTHS[+document.getElementById('sel-month').value]} พ.ศ. ${document.getElementById('sel-year').value}`; }
-function getEntryPeriod(){ return `${MONTHS[+document.getElementById('e-sel-month').value]} พ.ศ. ${document.getElementById('e-sel-year').value}`; }
+function getPeriod(){ return `${MONTHS[+document.getElementById('sel-month').value]} ปีงบประมาณ ${document.getElementById('sel-year').value}`; }
+function getEntryPeriod(){ return `${MONTHS[+document.getElementById('e-sel-month').value]} ปีงบประมาณ ${document.getElementById('e-sel-year').value}`; }
 function onPeriodChange(){
   document.getElementById('period-label').textContent=getPeriod();
   syncToEntry(); loadData();

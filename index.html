@@ -28,7 +28,7 @@ body{font-family:'Sarabun',sans-serif;background:var(--bg);color:var(--text);fon
 }
 .hdr-logo{
   width:90px;height:90px;object-fit:contain;flex-shrink:0;
-  filter:drop-shadow(0 2px 10px rgba(255,200,50,.2));
+  filter:drop-shadow(0 2px 8px rgba(255,200,50,.15));
 }
 .hdr-title{width:100%;text-align:center;}
 .hdr-title h1{
@@ -237,36 +237,70 @@ td.ic{width:95px;vertical-align:middle}
 .dist-btn.sel{background:#f59e0b;color:#fff;border-color:#f59e0b;}
 
 /* ── RESPONSIVE ── */
-@media(max-width:960px){.kpi-grid{grid-template-columns:repeat(2,1fr)}.charts-row{grid-template-columns:1fr}}
-@media(max-width:700px){
-  .bname{flex:0 0 140px;font-size:10px}
-  .charts-row{grid-template-columns:1fr}
+@media(max-width:960px){
+  .kpi-grid{grid-template-columns:repeat(2,1fr)}
+  .charts-row{grid-template-columns:1fr !important}
 }
+
+@media(max-width:700px){
+  .charts-row{grid-template-columns:1fr !important}
+  .bname{flex:0 0 160px;font-size:11px}
+}
+
 @media(max-width:600px){
+  /* Header */
   .hdr-top{padding:14px 16px 12px;gap:8px;}
-  .hdr-logo{width:64px;height:64px;}
-  .hdr-title h1{font-size:15px;}
-  .hdr-title .sub{font-size:10px;white-space:normal;line-height:1.4;}
-  .hdr-bot{top:120px;padding:0 10px;}
-  .hdr-title .sub{font-size:10px}
-  .hdr-bot{top:70px;padding:0 10px}
-  .tab{font-size:12px;padding:10px 12px;gap:4px}
-  .fp-lbl{font-size:9px;padding:0 7px}
-  .fp select{font-size:11px;padding:0 5px}
+  .hdr-logo{width:60px;height:60px;}
+  .hdr-title h1{font-size:14px;}
+  .hdr-title .sub{font-size:10px;white-space:normal;line-height:1.5;margin-top:4px;}
+
+  /* Tab + filter: stack vertically */
+  .hdr-bot{
+    flex-direction:column;align-items:stretch;
+    padding:0;top:128px;
+  }
+  .tabs{border-bottom:1px solid #1e3a6e;padding:0 12px;}
+  .tab{font-size:12px;padding:9px 12px;gap:4px}
+  .hdr-bot > div:last-child{
+    display:flex;gap:6px;padding:6px 12px;
+    overflow-x:auto;scrollbar-width:none;
+    border-bottom:3px solid #2563eb;
+  }
+  .hdr-bot > div:last-child::-webkit-scrollbar{display:none}
+  .fp-lbl{font-size:9px;padding:0 6px;height:30px;}
+  .fp select{font-size:11px;padding:0 5px;height:30px;}
+  .fp{margin:0;}
+
+  /* Layout */
   .wrap,.wrap-sm{padding:10px}
-  .kpi-grid{gap:8px}
+  .kpi-grid{grid-template-columns:repeat(2,1fr);gap:8px}
   .kpi{padding:11px 12px}
   .kpi-val{font-size:20px}
-  .bname{flex:0 0 140px;font-size:10px}
-  .bval{width:48px;font-size:12px;}
+  .kpi-badge{display:none}
+  .charts-row{grid-template-columns:1fr !important;gap:10px;}
+
+  /* Bar rows: stack number+name above, bar+val below */
+  .brow{flex-wrap:wrap;gap:4px;padding:8px 8px;}
+  .bnum{width:20px;font-size:10px;}
+  .bname{flex:1 1 calc(100% - 30px);font-size:11px;padding-right:0;}
+  .btrack{flex:1 1 calc(100% - 70px);}
+  .bval{width:54px;font-size:12px;}
+
   .card{padding:12px}
   td.ic{width:75px}
   .ni{font-size:12px;padding:5px 6px}
   .btn{font-size:12px;padding:9px 14px}
-  .extra-item{grid-template-columns:1fr 75px 75px 32px}
+  .extra-item{grid-template-columns:1fr 70px 70px 32px}
   .pdis{margin-left:0}
+  .tbl-form{min-width:340px;}
+  .dist-btn{font-size:11px;padding:5px 10px;}
 }
-@media(max-width:400px){.kpi-grid{grid-template-columns:repeat(2,1fr)}.hdr-title h1{font-size:12px}.bname{flex:0 0 90px}}
+
+@media(max-width:400px){
+  .kpi-grid{grid-template-columns:repeat(2,1fr)}
+  .hdr-title h1{font-size:12px}
+  .hdr-logo{width:48px;height:48px;}
+}
 </style>
 </head>
 <body>
@@ -728,12 +762,12 @@ function renderBars(){
         const pct=(a.monthly/mx*100).toFixed(1);
         const name=ACTS.find(x=>x.id===a.id)?.name||a.name||('กิจกรรม '+a.id);
         const val=a.monthly>0?fmt(a.monthly):'—';
-        const fillColor = a.monthly===0 ? 'background:#e2e8f0;' : '';
+        const noData=a.monthly===0;
         return `<div class="brow">
           <div class="bnum">${a.id||i+1}</div>
           <div class="bname">${name}</div>
-          <div class="btrack"><div class="bfill" style="width:${pct}%;${fillColor}"></div></div>
-          <div class="bval" style="${a.monthly===0?'color:#cbd5e1;':''}">${val}</div>
+          <div class="btrack"><div class="bfill" style="width:${pct}%;${noData?'background:#e2e8f0;':''}"></div></div>
+          <div class="bval" style="${noData?'color:#cbd5e1;font-weight:400;':''}">${val}</div>
         </div>`;
       }).join('')
     : '<p style="color:#94a3b8;font-size:12px;padding:12px 0;">ไม่มีข้อมูล</p>';

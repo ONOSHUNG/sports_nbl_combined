@@ -261,6 +261,7 @@ td.ic{width:95px;vertical-align:middle}
 .dist-btn{font-family:'Sarabun',sans-serif;font-size:12px;font-weight:600;padding:7px 14px;border-radius:99px;border:1.5px solid #fbbf24;background:#fff;color:#92400e;cursor:pointer;transition:all .15s;}
 .dist-btn:hover{background:#fef3c7;}
 .dist-btn.sel{background:#f59e0b;color:#fff;border-color:#f59e0b;}
+.dist-btn.sel-province{background:#2563eb !important;color:#fff !important;border-color:#2563eb !important;}
 
 /* ── RESPONSIVE ── */
 @media(max-width:960px){
@@ -481,6 +482,7 @@ td.ic{width:95px;vertical-align:middle}
   <div id="admin-slicer-wrap" style="display:none;background:#fff3cd;border:1.5px solid #fbbf24;border-radius:var(--r);padding:14px 16px;margin-bottom:14px;">
     <div style="font-size:12px;font-weight:700;color:#92400e;margin-bottom:10px;">⚙️ Admin — เลือกอำเภอที่ต้องการกรอกข้อมูล</div>
     <div style="display:flex;flex-wrap:wrap;gap:8px;" id="district-btn-group">
+      <button class="dist-btn" onclick="selectDistrict('จังหวัดหนองบัวลำภู')" style="border-color:#2563eb;color:#1e40af;font-weight:700;">🏛 จังหวัดหนองบัวลำภู</button>
       <button class="dist-btn" onclick="selectDistrict('เมืองหนองบัวลำภู')">เมืองหนองบัวลำภู</button>
       <button class="dist-btn" onclick="selectDistrict('นากลาง')">นากลาง</button>
       <button class="dist-btn" onclick="selectDistrict('ศรีบุญเรือง')">ศรีบุญเรือง</button>
@@ -663,9 +665,14 @@ function getActiveDistrict(){
 let selectedAdminDistrict = '';
 function selectDistrict(d){
   selectedAdminDistrict = d;
-  document.querySelectorAll('.dist-btn').forEach(b=>b.classList.remove('sel'));
-  event.target.classList.add('sel');
-  document.getElementById('admin-selected-district').textContent = `✅ เลือก: อำเภอ${d} — พร้อมกรอกข้อมูล`;
+  const isProvince = d === 'จังหวัดหนองบัวลำภู';
+  document.querySelectorAll('.dist-btn').forEach(b=>{
+    b.classList.remove('sel','sel-province');
+  });
+  const clicked = event.target.closest('.dist-btn');
+  if(clicked) clicked.classList.add(isProvince ? 'sel-province' : 'sel');
+  const label = isProvince ? '✅ ภาพรวมจังหวัดหนองบัวลำภู' : `✅ เลือก: อำเภอ${d} — พร้อมกรอกข้อมูล`;
+  document.getElementById('admin-selected-district').textContent = label;
 }
 function getActiveDistrict(){
   if(isAdmin) return selectedAdminDistrict || '';
@@ -725,7 +732,15 @@ async function loadData(){
     const r=await fetch(url);
     const j=await r.json();
     if(j.success&&j.activities&&j.activities.length){
-      curData=j.activities.map(a=>({...a,id:+a.id,monthly:+a.monthly||0,cumulative:+a.cumulative||0}));
+      curData=j.activities.map(a=>({
+        ...a,
+        id: Number(a.id)||0,
+        monthly: Number(a.monthly)||0,
+        cumulative: Number(a.cumulative)||0,
+        // ถ้า Sheet ไม่ส่งชื่อมา ให้ดึงจาก ACTS
+        name: a.name || ACTS.find(x=>x.id===Number(a.id))?.name || '',
+        unit: a.unit || ACTS.find(x=>x.id===Number(a.id))?.unit || '',
+      }));
       showErr('');
     } else { curData=[]; showErr(`ไม่พบข้อมูลเดือน ${getPeriod()}${district?' — อ.'+district:''} ใน Google Sheets`); }
   } catch(e){ curData=[]; showErr('เชื่อมต่อ Google Sheets ไม่ได้ — '+e.message); }
@@ -764,7 +779,9 @@ function renderBars(){
   document.getElementById('bar-list').innerHTML=curData.length
     ? curData.map((a,i)=>{
         const pct=(a.monthly/mx*100).toFixed(1);
-        const name=ACTS.find(x=>x.id===a.id)?.name||a.name||('กิจกรรม '+a.id);
+        // ดึงชื่อจาก ACTS array เสมอ ถ้าไม่เจอค่อยใช้จาก Sheet
+        const actDef = ACTS.find(x=>x.id===+a.id);
+        const name = actDef?.name || a.name || ('กิจกรรมที่ '+(a.id||i+1));
         const val=a.monthly>0?fmt(a.monthly):'—';
         const noData=a.monthly===0;
         return `<div class="brow">
@@ -785,15 +802,16 @@ function renderTable(){
   });
   document.getElementById('tbl-body').innerHTML=data.length
     ? data.map(a=>{
-        const name=ACTS.find(x=>x.id===a.id)?.name||a.name||('กิจกรรม '+a.id);
-        const unit=ACTS.find(x=>x.id===a.id)?.unit||a.unit||'';
+        const actDef = ACTS.find(x=>x.id===+a.id);
+        const name = actDef?.name || a.name || ('กิจกรรมที่ '+a.id);
+        const unit = actDef?.unit || a.unit || '';
         return `<tr>
-          <td style="color:#94a3b8;font-size:11px;white-space:nowrap">${a.id}</td>
-          <td style="font-size:11px;line-height:1.4;max-width:240px">${name}</td>
-          <td style="color:#64748b;font-size:10px;white-space:nowrap">${unit}</td>
-          <td class="nr">${fmt(a.monthly)}</td>
-          <td class="nr" style="color:#4f46e5;font-weight:700">${fmt(a.cumulative)}</td>
-          <td>${a.monthly>0?`<span class="bdg bdg-on"><span class="bdg-d"></span>ดำเนินการ</span>`:`<span class="bdg bdg-off"><span class="bdg-d"></span>ไม่มีข้อมูล</span>`}</td>
+          <td style="color:#94a3b8;font-size:11px;white-space:nowrap;vertical-align:top;padding-top:11px">${a.id}</td>
+          <td style="font-size:11px;line-height:1.5;word-break:break-word;">${name}</td>
+          <td style="color:#64748b;font-size:10px;white-space:nowrap;vertical-align:top;padding-top:11px">${unit}</td>
+          <td class="nr" style="vertical-align:top;padding-top:11px">${fmt(a.monthly)}</td>
+          <td class="nr" style="color:#4f46e5;font-weight:700;vertical-align:top;padding-top:11px">${fmt(a.cumulative)}</td>
+          <td style="vertical-align:top;padding-top:9px">${a.monthly>0?`<span class="bdg bdg-on"><span class="bdg-d"></span>ดำเนินการ</span>`:`<span class="bdg bdg-off"><span class="bdg-d"></span>ไม่มีข้อมูล</span>`}</td>
         </tr>`;
       }).join('')
     : `<tr><td colspan="6" style="text-align:center;color:#94a3b8;padding:20px;font-size:12px;">ไม่พบข้อมูลในเดือนนี้</td></tr>`;
@@ -805,7 +823,6 @@ function renderTable(){
   const i=keys.indexOf(sk);
   if(i>=0){const ths=document.querySelectorAll('#pg-dash thead th');if(ths[i])ths[i].classList.add(sd==='asc'?'sa':'sd');}
 }
-function srt(k){sd=sk===k?(sd==='asc'?'desc':'asc'):'asc';sk=k;renderTable();}
 
 // ── ENTRY FORM ──
 function buildForm(){

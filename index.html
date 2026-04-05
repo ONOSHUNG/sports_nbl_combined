@@ -379,16 +379,17 @@ td.ic{width:90px;vertical-align:middle}
     <div class="fp" style="border-color:#7c3aed;">
       <div class="fp-lbl" style="background:#7c3aed;">
         <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
-        อำเภอ
+        ขอบเขต
       </div>
       <select id="sel-district" onchange="onDistrictChange()" style="font-family:'Sarabun',sans-serif;font-size:12px;font-weight:700;color:#5b21b6;background:transparent;border:none;outline:none;cursor:pointer;padding:0 7px;height:34px;">
-        <option value="">ทุกอำเภอ</option>
-        <option value="เมืองหนองบัวลำภู">เมืองหนองบัวลำภู</option>
-        <option value="นากลาง">นากลาง</option>
-        <option value="ศรีบุญเรือง">ศรีบุญเรือง</option>
-        <option value="สุวรรณคูหา">สุวรรณคูหา</option>
-        <option value="โนนสัง">โนนสัง</option>
-        <option value="นาวัง">นาวัง</option>
+        <option value="district:">ทุกอำเภอ</option>
+        <option value="province:">ทั้งจังหวัด (รวมหน่วยงาน)</option>
+        <option value="district:เมืองหนองบัวลำภู">อ.เมืองหนองบัวลำภู</option>
+        <option value="district:นากลาง">อ.นากลาง</option>
+        <option value="district:ศรีบุญเรือง">อ.ศรีบุญเรือง</option>
+        <option value="district:สุวรรณคูหา">อ.สุวรรณคูหา</option>
+        <option value="district:โนนสัง">อ.โนนสัง</option>
+        <option value="district:นาวัง">อ.นาวัง</option>
       </select>
     </div>
     <!-- Fiscal picker -->
@@ -505,10 +506,12 @@ td.ic{width:90px;vertical-align:middle}
     <button class="entry-logout" onclick="doLogout()">🔓 ออกจากระบบ</button>
   </div>
 
-  <!-- Admin slicer: เลือกอำเภอก่อนกรอก (แสดงเฉพาะ Admin) -->
-  <div id="admin-slicer-wrap" style="display:none;background:#fff3cd;border:1.5px solid #fbbf24;border-radius:var(--r);padding:14px 16px;margin-bottom:14px;">
-    <div style="font-size:12px;font-weight:700;color:#92400e;margin-bottom:10px;">⚙️ Admin — เลือกอำเภอที่ต้องการกรอกข้อมูล</div>
-    <div style="display:flex;flex-wrap:wrap;gap:8px;" id="district-btn-group">
+  <!-- Admin slicer: เลือกหน่วยงาน/อำเภอก่อนกรอก (แสดงเฉพาะ Admin) -->
+  <div id="admin-slicer-wrap" style="display:none;background:#fff3cd;border:1.5px solid #fbbf24;border-radius:var(--r);padding:14px;margin-bottom:14px;">
+    <div style="font-size:12px;font-weight:700;color:#92400e;margin-bottom:10px;">⚙️ Admin — เลือกหน่วยงานที่ต้องการกรอกข้อมูล</div>
+
+    <div style="font-size:10px;font-weight:700;color:#92400e;margin-bottom:6px;letter-spacing:.04em;">🏛 จังหวัด / อำเภอ</div>
+    <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px;">
       <button class="dist-btn" onclick="selectDistrict('จังหวัดหนองบัวลำภู')" style="border-color:#2563eb;color:#1e40af;font-weight:700;">🏛 จังหวัดหนองบัวลำภู</button>
       <button class="dist-btn" onclick="selectDistrict('เมืองหนองบัวลำภู')">เมืองหนองบัวลำภู</button>
       <button class="dist-btn" onclick="selectDistrict('นากลาง')">นากลาง</button>
@@ -517,7 +520,18 @@ td.ic{width:90px;vertical-align:middle}
       <button class="dist-btn" onclick="selectDistrict('โนนสัง')">โนนสัง</button>
       <button class="dist-btn" onclick="selectDistrict('นาวัง')">นาวัง</button>
     </div>
-    <div id="admin-selected-district" style="font-size:12px;color:#92400e;margin-top:10px;min-height:16px;"></div>
+
+    <div style="font-size:10px;font-weight:700;color:#92400e;margin-bottom:6px;letter-spacing:.04em;">🏢 หน่วยงาน</div>
+    <div style="display:flex;flex-wrap:wrap;gap:6px;">
+      <button class="dist-btn" onclick="selectDistrict('สพป. หนองบัวลำภู เขต 1')">สพป. เขต 1</button>
+      <button class="dist-btn" onclick="selectDistrict('สพป. หนองบัวลำภู เขต 2')">สพป. เขต 2</button>
+      <button class="dist-btn" onclick="selectDistrict('สพม. เลย-หนองบัวลำภู')">สพม. เลย-นภ.</button>
+      <button class="dist-btn" onclick="selectDistrict('องค์การบริหารส่วนจังหวัดหนองบัวลำภู')">อบจ. นภ.</button>
+      <button class="dist-btn" onclick="selectDistrict('เทศบาลเมืองหนองบัวลำภู')">ทม. นภ.</button>
+      <button class="dist-btn" onclick="selectDistrict('ท่องเที่ยวและกีฬาจังหวัดหนองบัวลำภู')">ท่องเที่ยวและกีฬา</button>
+    </div>
+
+    <div id="admin-selected-district" style="font-size:12px;color:#92400e;margin-top:10px;min-height:16px;font-weight:600;"></div>
   </div>
 
   <div class="period-card">
@@ -621,19 +635,31 @@ const ACTS = [
 
 // ══════════════════════════════════════════
 // รหัสผ่านแต่ละอำเภอ → ชื่ออำเภอ
+// ══ รหัสผ่าน → {ชื่อ, กลุ่ม} ══
 const PW_MAP = {
-  '090391': 'เมืองหนองบัวลำภู',
-  '090392': 'นากลาง',
-  '090393': 'ศรีบุญเรือง',
-  '090394': 'สุวรรณคูหา',
-  '090395': 'โนนสัง',
-  '090396': 'นาวัง',
-  '909039': 'Admin',
+  // Admin
+  '909039': { name:'Admin (กกท.)',            group:'admin' },
+  '901039': { name:'Admin (ท้องถิ่นจังหวัด)', group:'admin' },
+  // หน่วยงาน
+  '900931': { name:'สพป. หนองบัวลำภู เขต 1',              group:'agency' },
+  '900932': { name:'สพป. หนองบัวลำภู เขต 2',              group:'agency' },
+  '900933': { name:'สพม. เลย-หนองบัวลำภู',                group:'agency' },
+  '900934': { name:'องค์การบริหารส่วนจังหวัดหนองบัวลำภู',  group:'agency' },
+  '900935': { name:'เทศบาลเมืองหนองบัวลำภู',               group:'agency' },
+  '900936': { name:'ท่องเที่ยวและกีฬาจังหวัดหนองบัวลำภู',  group:'agency' },
+  // อำเภอ
+  '090391': { name:'เมืองหนองบัวลำภู', group:'district' },
+  '090392': { name:'นากลาง',           group:'district' },
+  '090393': { name:'ศรีบุญเรือง',      group:'district' },
+  '090394': { name:'สุวรรณคูหา',       group:'district' },
+  '090395': { name:'โนนสัง',           group:'district' },
+  '090396': { name:'นาวัง',            group:'district' },
 };
 // ══════════════════════════════════════════
 
-let currentDistrict = '';   // ชื่ออำเภอที่ login
-let isAdmin = false;
+let currentDistrict = '';
+let currentGroup    = '';   // 'admin' | 'agency' | 'district'
+let isAdmin         = false;
 
 function showLoginModal(){
   document.getElementById('login-modal').style.display='flex';
@@ -655,18 +681,25 @@ function togglePw(){
 }
 
 function doLogin(){
-  const pw=document.getElementById('login-pw').value.trim();
-  const err=document.getElementById('login-err');
-  const district=PW_MAP[pw];
-  if(!district){ err.textContent='รหัสผ่านไม่ถูกต้อง'; document.getElementById('login-pw').value=''; return; }
+  const pw  = document.getElementById('login-pw').value.trim();
+  const err = document.getElementById('login-err');
+  const entry = PW_MAP[pw];
+  if(!entry){ err.textContent='รหัสผ่านไม่ถูกต้อง'; document.getElementById('login-pw').value=''; return; }
 
   err.textContent='';
-  currentDistrict = district;
-  isAdmin = district==='Admin';
+  currentDistrict = entry.name;
+  currentGroup    = entry.group;
+  isAdmin         = entry.group === 'admin';
 
   // อัปเดต header entry
-  document.getElementById('entry-district-name').textContent = isAdmin ? 'Admin — กรุณาเลือกอำเภอ' : 'อำเภอ'+district;
-  // แสดง/ซ่อน slicer
+  const headerLabel = {
+    admin:    `⚙️ ${entry.name} — กรุณาเลือกหน่วยงานที่กรอก`,
+    agency:   `🏢 ${entry.name}`,
+    district: `🏛 อำเภอ${entry.name}`,
+  }[entry.group];
+  document.getElementById('entry-district-name').textContent = headerLabel;
+
+  // แสดง/ซ่อน slicer เฉพาะ Admin
   document.getElementById('admin-slicer-wrap').style.display = isAdmin ? 'block' : 'none';
 
   document.getElementById('lock-icon').textContent='🔓';
@@ -676,17 +709,15 @@ function doLogin(){
 }
 
 function doLogout(){
-  currentDistrict=''; isAdmin=false;
+  currentDistrict=''; currentGroup=''; isAdmin=false; selectedAdminDistrict='';
   document.getElementById('lock-icon').textContent='🔒';
   switchTab('dash',true);
   toast('ออกจากระบบเรียบร้อยแล้ว','');
 }
 
 function getActiveDistrict(){
-  if(isAdmin){
-    return document.getElementById('admin-district-sel')?.value || '_admin_';
-  }
-  return currentDistrict;
+  if(isAdmin) return selectedAdminDistrict || '';
+  return currentDistrict; // ทั้ง agency และ district ใช้ชื่อตรงๆ
 }
 
 let selectedAdminDistrict = '';
@@ -749,19 +780,16 @@ function setLoad(on){document.getElementById('lov').style.display=on?'flex':'non
 function showErr(m){const e=document.getElementById('errbanner');e.textContent=m;e.style.display=m?'block':'none';}
 
 // ── VIEW MODE ──
-let viewMode = 'monthly'; // 'monthly' | 'yearly'
+let viewMode = 'monthly';
 
 function setViewMode(mode){
   viewMode = mode;
   const isYearly = mode==='yearly';
-  // toggle button styles
   document.getElementById('btn-monthly').style.background = isYearly ? '#1e293b' : '#2563eb';
   document.getElementById('btn-monthly').style.color      = isYearly ? '#64748b' : '#fff';
   document.getElementById('btn-yearly').style.background  = isYearly ? '#2563eb' : '#1e293b';
   document.getElementById('btn-yearly').style.color       = isYearly ? '#fff' : '#64748b';
-  // ซ่อน/แสดง dropdown เดือน
   document.getElementById('sel-month').style.display = isYearly ? 'none' : '';
-  // อัปเดต KPI labels
   document.getElementById('kpi-active-badge').textContent = isYearly ? 'ทั้งปี' : 'เดือนนี้';
   document.getElementById('kpi-active-lbl').textContent   = isYearly ? 'ดำเนินการทั้งปี' : 'ดำเนินการเดือนนี้';
   document.getElementById('kpi-monthly-badge').textContent= isYearly ? 'รวมทั้งปี' : 'ประจำเดือน';
@@ -773,19 +801,27 @@ function onDistrictChange(){ loadData(); }
 
 async function loadData(){
   setLoad(true); showErr('');
-  const district = document.getElementById('sel-district')?.value||'';
   const year     = document.getElementById('sel-year').value;
   const isYearly = viewMode==='yearly';
 
+  // parse "scope:district" จาก dropdown
+  const selVal   = document.getElementById('sel-district')?.value || 'district:';
+  const [scope, districtVal] = selVal.split(':');
+  const district = districtVal || '';
+
+  // สร้าง URL
   let url;
   if(isYearly){
-    url = `${URL_GAS}?fiscalYear=${encodeURIComponent(year)}`;
+    url = `${URL_GAS}?fiscalYear=${encodeURIComponent(year)}&scope=${scope}`;
     document.getElementById('period-label').textContent = `ปีงบประมาณ ${year}`;
   } else {
-    url = `${URL_GAS}?period=${encodeURIComponent(getPeriod())}`;
+    url = `${URL_GAS}?period=${encodeURIComponent(getPeriod())}&scope=${scope}`;
     document.getElementById('period-label').textContent = getPeriod();
   }
   if(district) url += `&district=${encodeURIComponent(district)}`;
+
+  // label แสดงผล
+  const scopeLabel = scope==='province' ? 'ทั้งจังหวัด' : (district ? `อ.${district}` : 'ทุกอำเภอ');
 
   try{
     const r=await fetch(url);
@@ -803,7 +839,7 @@ async function loadData(){
     } else {
       curData=[];
       const label = isYearly ? `ปีงบประมาณ ${year}` : getPeriod();
-      showErr(`ไม่พบข้อมูล ${label}${district?' — อ.'+district:''} ใน Google Sheets`);
+      showErr(`ไม่พบข้อมูล ${label} — ${scopeLabel}`);
     }
   } catch(e){ curData=[]; showErr('เชื่อมต่อ Google Sheets ไม่ได้ — '+e.message); }
   renderAll(); setLoad(false);

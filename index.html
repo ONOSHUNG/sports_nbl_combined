@@ -1704,9 +1704,23 @@ const FUEL_CAPS={"s01":{"diesel":20000,"g91":9000,"g95":0,"e20":0,"g95p":0,"powe
 function getStationFuels(sid){const caps=FUEL_CAPS[sid];if(!caps)return FUELS;return FUELS.filter(f=>caps[f.key]>0);}
 function getStationCap(sid){const caps=FUEL_CAPS[sid];if(!caps)return 0;return Object.values(caps).filter(v=>v>0).reduce((a,b)=>a+b,0);}
 
-const LS_DATA='nbl_fuel_data_v3',LS_URL='nbl_gas_url',LS_INTERVAL='nbl_gas_interval',LS_MODE='nbl_fuel_mode';
+const LS_DATA='nbl_fuel_data_v4',LS_URL='nbl_gas_url',LS_INTERVAL='nbl_gas_interval',LS_MODE='nbl_fuel_mode';
 function defaultData(){const d={};GROUPS.forEach(g=>g.stations.forEach(s=>{const cap=getStationCap(s.id);d[s.id]={cap,diesel:0,g91:0,g95:0,e20:0,g95p:0,power:0,updated_at:''};}));return d;}
-function loadData(){try{const raw=localStorage.getItem(LS_DATA);if(raw){const p=JSON.parse(raw),def=defaultData();Object.keys(def).forEach(id=>{if(p[id])def[id]={...def[id],...p[id]};});return def;}}catch(e){}return defaultData();}
+function loadData(){
+  try{
+    const raw=localStorage.getItem(LS_DATA);
+    if(raw){
+      const p=JSON.parse(raw),def=defaultData();
+      Object.keys(def).forEach(id=>{
+        if(p[id])def[id]={...def[id],...p[id]};
+        // บังคับ cap จาก FUEL_CAPS เสมอ ไม่ใช้ค่าเก่าจาก localStorage
+        def[id].cap=getStationCap(id);
+      });
+      return def;
+    }
+  }catch(e){}
+  return defaultData();
+}
 function persistData(){localStorage.setItem(LS_DATA,JSON.stringify(DATA));}
 let DATA=loadData();
 const DEFAULT_GS_URL='https://script.google.com/macros/s/AKfycbyGsO6e53iYL6S5GykurNc2KZTLTwJMXLFqgrh6-UZSZcp10DVNExamoFIdqJy-8P5EvA/exec';
